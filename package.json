@@ -4,7 +4,8 @@
   "description": "mongodb-js management and orchestration tool",
   "main": "index.js",
   "dependencies": {
-    "docopt": "^0.6.0"
+    "docopt": "^0.6.0",
+    "glob": "^5.0.2"
   },
   "devDependencies": {},
   "scripts": {
