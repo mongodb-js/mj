@@ -13,7 +13,6 @@ Options:
    -h, --help     Print this help screen
 
 Available commands are:
-   add        Add a repository to the mongodb-js organization
    check      Check if all requirements are met and tests pass
    create     Create a new mongodb-js repository
    ingest     Prepare ingestion of existing repository to mongodb-js
