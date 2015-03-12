@@ -1,7 +1,7 @@
-module.exports = function (argv) {
+module.exports = function (args) {
   // defaults
-  argv['<directory>'] = argv['<directory>'] || '.';
+  args['<directory>'] = args['<directory>'] || '.';
 
   // @todo: implementation
-  console.log(argv);
+  console.log(args);
 }

@@ -1,7 +1,7 @@
 var fs = require('fs');
 
-module.exports = function (argv) {
-  var cmd = argv['<command>'];
+module.exports = function (args) {
+  var cmd = args['<command>'];
   try {
     cli = fs.readFileSync('./docopts/'+cmd+'.docopt', 'utf-8');
     console.log(cli);
