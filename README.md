@@ -3,6 +3,26 @@ mongodb-js management and orchestration tool
 
 This is currently an empty shell, only CLI placeholders set up. 
 
+### Usage
+
+```
+Usage:
+   mj [--version] [--help] <command> [<args>...]
+
+Options:
+   -h, --help     Print this help screen
+
+Available commands are:
+   add        Add a repository to the mongodb-js organization
+   check      Check if all requirements are met and tests pass
+   create     Create a new mongodb-js repository
+   ingest     Prepare ingestion of existing repository to mongodb-js
+   help       Provide help on any command
+
+See 'mj help <command>' for more information on a specific command.
+```
+
+
 ### Add new command
 
 To add the command `foobar`, follow these steps:
