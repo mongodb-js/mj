@@ -1,10 +1,9 @@
 {
   "name": "mj",
   "version": "0.1.0",
-  "description": "mongodb-js management and orchestration",
+  "description": "mongodb-js management and orchestration tool",
   "main": "index.js",
   "dependencies": {
-    "debug": "^2.1.2",
     "docopt": "^0.6.0"
   },
   "devDependencies": {},
