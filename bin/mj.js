@@ -13,8 +13,6 @@ var argv = docopt(cli, {
   options_first: true
 });
 
-
-
 // make `mj help` (no additional arguments) behave like `mj --help`
 if ((argv['<command>'] === 'help') && (argv['<args>'].length === 0)) {
   debug('treat `mj help` like `mj --help`');

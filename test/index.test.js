@@ -33,16 +33,18 @@ function strip(str) {
   return str.replace(/^\s+|\s+$/g, '');
 }
 
-describe('mj', function() {
+describe('mj module', function() {
   it('should be requireable', function() {
     assert(mj);
   });
+});
 
+describe('mj cli', function () {
   describe('--help', function (done) {
     it('should contain help for usage, options, commands, pointer to `mj help`', function (done) {
       mjWithArgs('help', function (err, stdout) {
         if (err) throw err;
-        // must contain the following lines
+        // must contain lines with the following strings
         assert.ok(containsLineWith(stdout, [
           'Usage:',
           'Options:',
@@ -62,5 +64,23 @@ describe('mj', function() {
         done();
       });
     });
+
+    it('should output the correct help text when given a command', function (done) {
+      var commands = Object.keys(mj);
+      commands.forEach(function (cmd) {
+        mjWithArgs('help ' + cmd, function (err, stdout) {
+          if (err) throw err;
+          assert.ok(containsLineWith(stdout, [
+            'mj ' + cmd, 
+            'Usage:',
+            'Options:',
+            '-h, --help'
+          ]));
+          done();
+        });
+      });
+    });
   });
+
+
 });
