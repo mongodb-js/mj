@@ -13,7 +13,7 @@ var argv = docopt(cli, {
 
 // handle "mj help"
 if (argv['<command>'] === 'help') {
-  debug('showing help');
+  debug('showing help text directly, not via help command');
   // only output main help screen
   console.log(cli);
   process.exit(0);
