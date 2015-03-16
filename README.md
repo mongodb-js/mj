@@ -42,10 +42,10 @@ npm test
 
 ### Debugging
 
-To enable debugging, set the `DEBUG` environment variable to `mj:*`:
+To enable debugging, set the `DEBUG` environment variable to `mj*`:
 
 ```
-DEBUG=mj:* mj check
+DEBUG=mj* mj check
 ```
 
 ### Adding commands
