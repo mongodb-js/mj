@@ -1,21 +1,31 @@
 {
   "name": "mj",
   "version": "0.1.0",
-  "description": "mongodb-js management and orchestration tool",
+  "description": "mongodb-js tooling",
   "main": "index.js",
-  "dependencies": {
-    "docopt": "^0.6.0",
-    "glob": "^5.0.2"
+  "bin": {
+    "mj": "bin/mj.js"
   },
-  "devDependencies": {},
+  "dependencies": {
+    "amp-defaults": "^1.0.1",
+    "async": "^0.9.0",
+    "debug": "^2.1.3",
+    "docopt": "^0.6.0",
+    "glob": "^5.0.2",
+    "joi": "^6.0.8",
+    "rimraf": "^2.3.2"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.1"
+  },
   "scripts": {
-    "test": "npm test"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/mongodb-js/mj"
   },
-  "author": "",
+  "author": "Thomas Rückstieß <thomas@mongodb.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mongodb-js/mj/issues"

@@ -1,30 +1,26 @@
-#!/usr/bin/env node
+var fs = require('fs'),
+  commands = {},
+  debug = require('debug')('mj');
 
-var docopt = require('docopt').docopt, 
-    pkg = require(__dirname + '/package.json'),
-    fs = require('fs');
+fs.readdirSync(__dirname + '/commands').forEach(function(file) {
+  var name = file.replace('.js', '');
+  commands[name] = require('./commands/' + name);
+});
+debug('Loaded commands %s', Object.keys(commands));
 
-var cli = fs.readFileSync('./docopts/main.docopt', 'utf-8');
-var argv = docopt(cli, {version: pkg.version, options_first: true});
+module.exports = function(argv, done) {
+  debug('normalizing options', argv);
 
-// handle "mj help"
-if (argv['<command>'] === 'help') {
-  if (argv['<args>'].length === 0) {
-    // only output main help screen
-    console.log(cli);
-    process.exit(0);
-  } 
-}
+  argv.directory = argv['<directory>'] || process.cwd();
+  debug('normalized options to', argv);
 
-// pass on to sub parser
-var cmd = argv['<command>'];
-try {
-  cli = fs.readFileSync('./docopts/'+cmd+'.docopt', 'utf-8');
-} catch (e) {
-  console.error('Unknown command "' + cmd + '". See "mj help" for available commands.')
-  process.exit(1);
-}
-argv = docopt(cli, {version: pkg.version, options_first: false});
+  var name = argv['<command>'];
+  if (!commands[name]) {
+    return process.nextTick(done.bind(null, new Error('Unknown command `' + name + '`')));
+  }
 
-// call function with parsed args
-require('./commands/'+cmd)(argv);
+  debug('running command `%s`', name);
+  commands[name](argv, function(err, res) {
+    done(err, res);
+  });
+};

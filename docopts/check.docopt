@@ -1,13 +1,9 @@
-Usage: 
-   mj check [--help] [<directory>] [options]
+Analyze the code health of a mongodb-js module.
+
+Usage:
+   mj check [<directory>]
+   mj check -h | --help
+
 
 Options:
   -h, --help            Print this help screen
-  -t, --skip-tests      Skip check if tests pass
-  -d, --skip-docs       Skip check if documentation exists
-  -c, --skip-cover      Skip check if code coverage is complete
-
-Without any further options, "mj check" tests for several requirements:
-  - does "npm test" succeed?
-  - is there a non-empty README.* file, or a non-empty ./docs folder?
-  - is the code coverage 100%?
