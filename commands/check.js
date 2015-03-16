@@ -14,7 +14,6 @@ var checkRequiredFilesExist = function(argv, done) {
   var tasks = [
     'README*',
     'LICENSE',
-    'CONTRIBUTING*',
     '.travis.yml',
     '.gitignore',
     '.npmignore',
@@ -34,7 +33,7 @@ var checkRequiredFilesExist = function(argv, done) {
 
           fs.exists(files[0], function(exists) {
             if (!exists) return done(new Error('Missing required file ' + files[0]));
-            return done();
+            return cb(null, files[0]);
           });
         });
     };
@@ -54,15 +53,24 @@ var checkPackage = function(argv, done) {
   }
 
   var schema = Joi.object().keys({
-    name: Joi.string().alphanum().min(3).max(30).regex(/^[a-zA-Z0-9][a-zA-Z0-9\.\-_]*$/).required(),
+    name: Joi.string().alphanum().min(1).max(30).regex(/^[a-zA-Z0-9][a-zA-Z0-9\.\-_]*$/).required(),
     version: Joi.string().regex(/^[0-9]+\.[0-9]+[0-9+a-zA-Z\.\-]+$/).required(),
     description: Joi.string().max(80).required(),
     license: Joi.string().alphanum().max(10).required(),
-    homepage: Joi.string().uri('http').required(),
+    homepage: Joi.string().uri({
+      scheme: ['http', 'https']
+    }).required(),
+    main: Joi.string().optional(),
     repository: Joi.object().keys({
       type: Joi.string().valid('git').required(),
-      url: Joi.string().uri('git').regex(/mongodb-js\/[a-zA-Z0-9\.\-_]+/).required()
+      url: Joi.string().uri({
+        scheme: ['git', 'https']
+      }).regex(/mongodb-js\/[a-zA-Z0-9\.\-_]+/).required()
     }),
+    bin: Joi.object().optional(),
+    scripts: Joi.object().optional(),
+    bugs: Joi.object().required(),
+    author: Joi.string().required(),
     dependencies: Joi.object().required(),
     devDependencies: Joi.object().required()
   });
@@ -90,7 +98,6 @@ var checkFirstRun = function(argv, done) {
           done(new Error(cmd + ' failed'));
         });
 
-      child.stdout.pipe(process.stdout);
       child.stderr.pipe(process.stderr);
 
       if (cmd === 'npm start') {
@@ -149,7 +156,7 @@ var checkFirstRun = function(argv, done) {
 module.exports = function(argv, done) {
   async.series({
     'required files': checkRequiredFilesExist.bind(null, argv),
-    // 'package.json': checkPackage.bind(null, argv),
+    'package.json': checkPackage.bind(null, argv),
     'first run': checkFirstRun.bind(null, argv)
   }, done);
 };

@@ -37,9 +37,10 @@ argv['<command>'] = cmd;
 
 var mj = require('../');
 mj(argv, function(err, res) {
+  debug('command returned', err, res);
   if (err) {
     console.error(err);
     return process.exit(1);
   }
-  console.log(res);
+  console.log('ok');
 });
