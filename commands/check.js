@@ -145,9 +145,9 @@ var checkFirstRun = function(argv, done) {
       tasks.push(run('npm start'));
     }
 
-    async.series(tasks, function(err) {
+    async.series(tasks, function(err, results) {
       if (err) return done(err);
-      done();
+      done(null, results);
     });
 
   });

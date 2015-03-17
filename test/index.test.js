@@ -8,11 +8,6 @@ var mj = require('../'),
     fs = require('fs'),
     debug = require('debug')('mj:test');
 
-function mjWithArgs(args, callback) {
-  // e.g. mjWithArgs("create --type cli")
-  exec('node ' + BIN_MJ + ' ' + args, callback);
-}
-
 var BIN_MJ = path.resolve(__dirname, '../bin/mj.js');
 var NODE = which.sync('node');
 
