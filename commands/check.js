@@ -19,7 +19,6 @@ var checkRequiredFilesExist = function(argv, done) {
     'LICENSE',
     '.travis.yml',
     '.gitignore',
-    '.npmignore',
   ].map(function requireFileExists(pattern) {
     return function(cb) {
       glob(pattern, {
@@ -56,7 +55,7 @@ var checkPackage = function(argv, done) {
   }
 
   var schema = Joi.object().keys({
-    name: Joi.string().alphanum().min(1).max(30).regex(/^[a-zA-Z0-9][a-zA-Z0-9\.\-_]*$/).required(),
+    name: Joi.string().min(1).max(30).regex(/^[a-zA-Z0-9][a-zA-Z0-9\.\-_]*$/).required(),
     version: Joi.string().regex(/^[0-9]+\.[0-9]+[0-9+a-zA-Z\.\-]+$/).required(),
     description: Joi.string().max(80).required(),
     license: Joi.string().alphanum().max(10).required(),
@@ -77,7 +76,10 @@ var checkPackage = function(argv, done) {
     dependencies: Joi.object().required(),
     devDependencies: Joi.object().required()
   });
-  Joi.validate(pkg, schema, done);
+  Joi.validate(pkg, schema, {
+    abortEarly: false, 
+    allowUnknown: true
+  }, done);
 };
 
 // If I clone this repo and run `npm install && npm test` does it work?

@@ -18,7 +18,6 @@ Details:
     - LICENSE
     - .travis.yml
     - .gitignore
-    - .npmignore
 
   2. The package.json file must be filled out. The following fields are
      required: name, version, description, license, homepage, repository, 
