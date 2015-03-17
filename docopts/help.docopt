@@ -1,5 +1,5 @@
 Usage: 
-   mj help [--help] <command>
+   mj help [--help] [<command>]
 
 Options:
    -h, --help     Print this help screen
@@ -11,4 +11,3 @@ Available commands are:
    help       Provide help on any command
 
 See 'mj help <command>' for more information on a specific command.
-

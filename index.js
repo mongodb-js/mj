@@ -1,11 +1,14 @@
 var fs = require('fs'),
-  commands = {},
-  debug = require('debug')('mj');
+    parseCmd = require('./util/parse_cmd'),
+    debug = require('debug')('mj');
 
-function loadCommand(cmd) {
-  return function(argv, done) {
+function wrapCommand(cmd) {
+  return function(args, done) {
+    // parse cmd line arguments, use args string if provided
+    var argv = parseCmd(cmd, args);
+
     // defaults
-    argv.directory = argv['<directory>'] || process.cwd();
+    argv['<directory>'] = argv['<directory>'] || process.cwd();
     
     debug('running command `%s`', cmd);
     require('./commands/' + cmd)(argv, function(err, res) {
@@ -14,11 +17,11 @@ function loadCommand(cmd) {
   };
 }
 
+var commands = {};
 fs.readdirSync(__dirname + '/commands').forEach(function(file) {
   var name = file.replace('.js', '');
-  commands[name] = loadCommand(name);
+  commands[name] = wrapCommand(name);
 });
-
 debug('Loaded commands %s', Object.keys(commands));
 
 module.exports = commands;

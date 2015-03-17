@@ -8,8 +8,8 @@ var fs = require('fs'),
 
 // Checks for required files
 var checkRequiredFilesExist = function(argv, done) {
-  debug('checking requred files', argv);
-  var dir = argv.directory;
+  debug('checking required files', argv);
+  var dir = argv['<directory>'];
 
   var tasks = [
     'README*',
@@ -43,7 +43,7 @@ var checkRequiredFilesExist = function(argv, done) {
 
 // Check package.json conforms
 var checkPackage = function(argv, done) {
-  var dir = argv.directory,
+  var dir = argv['<directory>'],
     pkg;
 
   try {
@@ -90,7 +90,7 @@ var checkFirstRun = function(argv, done) {
         completed = false;
 
       var child = spawn(bin, args, {
-        cwd: argv.directory
+        cwd: argv['<directory>']
       })
         .on('error', function(err) {
           completed = true;
@@ -124,7 +124,7 @@ var checkFirstRun = function(argv, done) {
   debug('checking first run');
 
   var pkg,
-    dir = argv.directory;
+    dir = argv['<directory>'];
 
   try {
     pkg = require(dir + '/package.json');

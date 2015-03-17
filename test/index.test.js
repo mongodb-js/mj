@@ -1,19 +1,14 @@
 var mj = require('../'),
-    fs = require('fs'),
+    loadDocopt = require('../util/load_docopt'),
     assert = require('assert'),
     exec = require('child_process').exec,
     debug = require('debug')('mj:test');
 
 var BIN_MJ = __dirname + '/../bin/mj.js';
-var DOCOPT_DIR = __dirname + '/../docopts/';
 
 function mjWithArgs(args, callback) {
   // e.g. mjWithArgs("create --type cli")
   exec('node ' + BIN_MJ + ' ' + args, callback);
-}
-
-function loadHelpText(cmd) {
-  return fs.readFileSync(DOCOPT_DIR + cmd + '.docopt', 'utf-8');
 }
 
 function containsLineWith(text, str) {
@@ -60,7 +55,7 @@ describe('mj cli', function () {
     it('should return the main --help text if no arguments given', function (done) {
       mjWithArgs('help', function (err, stdout) {
         if (err) throw err;
-        assert.equal(strip(loadHelpText('main')), strip(stdout));
+        assert.equal(strip(loadDocopt('main')), strip(stdout));
         done();
       });
     });
