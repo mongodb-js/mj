@@ -16,7 +16,8 @@
     "rimraf": "^2.3.2"
   },
   "devDependencies": {
-    "mocha": "^2.2.1"
+    "mocha": "^2.2.1",
+    "which": "^1.0.9"
   },
   "scripts": {
     "test": "mocha"
