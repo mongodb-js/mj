@@ -28,14 +28,14 @@ var checkRequiredFilesExist = function(argv, done) {
           debug('resolved %s for `%s`', files, pattern);
           if (err) return cb(err);
           if (files.length === 0) {
-            return done(new Error('missing required file ' + pattern));
+            return done(new Error('missing required file matching ' + pattern));
           }
           if (files.length > 1) {
             return done(new Error('more than one file matched ' + pattern));
           }
 
           fs.exists(files[0], function(exists) {
-            if (!exists) return done(new Error('missing required file ' + files[0]));
+            if (!exists) return done(new Error('missing required file matching ' + files[0]));
             return cb(null, files[0]);
           });
         });
