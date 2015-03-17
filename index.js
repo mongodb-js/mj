@@ -1,5 +1,6 @@
 var fs = require('fs'),
     parseCmd = require('./util/parse_cmd'),
+    path = require('path'),
     debug = require('debug')('mj');
 
 function wrapCommand(cmd) {
@@ -8,7 +9,7 @@ function wrapCommand(cmd) {
     var argv = parseCmd(cmd, args);
 
     // defaults
-    argv['<directory>'] = argv['<directory>'] || process.cwd();
+    argv['<directory>'] = path.resolve(argv['<directory>']) || process.cwd();
     
     debug('running command `%s`', cmd);
     require('./commands/' + cmd)(argv, function(err, res) {
