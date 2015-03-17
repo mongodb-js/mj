@@ -9,8 +9,10 @@ module.exports = function parseCmd(cmd, str, options_first) {
     options_first: options_first || false,
     version: pkg.version
   }
-  if (str) { 
-    options['argv'] = str.split();
+  if (str) {
+    // split on whitespace and prepend command
+    options['argv'] = str.split(' ');
+    options['argv'].unshift(cmd);
   }
 
   try {
