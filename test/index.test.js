@@ -88,7 +88,7 @@ describe('mj cli', function () {
     });
   });
 
-  describe('help', function (done) {
+  describe('help', function () {
     it('should return the main --help text if no arguments given', function (done) {
       run('help', function (err, stdout) {
         if (err) throw err;
@@ -113,6 +113,18 @@ describe('mj cli', function () {
         }
       });
       async.parallel(tasks, done);
+    });
+  });
+
+  describe('check', function () {
+    it('should run successfully on mj itself', function (done) {
+      // increase timeout for this test
+      this.timeout(10000);
+      run('check', function (err, stdout) {
+        assert.ifError(err);
+        assert.ok(containsLineWith(stdout, 'check ok'));
+        done();
+      });
     });
   });
 

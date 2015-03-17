@@ -1,9 +1,10 @@
 Analyze the code health of a mongodb-js module.
 
 Usage:
-   mj check [<directory>]
+   mj check [-v] [<directory>]
    mj check -h | --help
 
 
 Options:
+  -v, --verbose         Print detailed results
   -h, --help            Print this help screen
