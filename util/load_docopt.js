@@ -1,8 +1,9 @@
-var fs = require('fs'),
-    debug = require('debug')('mj:util');
+'use strict';
+
+var fs = require('fs');
 
 var DOCOPT_DIR = '/../docopts/';
 
-module.exports = function (cmd) {
+module.exports = function(cmd) {
   return fs.readFileSync(__dirname + DOCOPT_DIR + cmd + '.docopt', 'utf-8');
-}
+};

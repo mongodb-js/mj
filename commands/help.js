@@ -1,5 +1,6 @@
-var fs = require('fs'),
-    debug = require('debug')('mj:help');
+'use strict';
+
+var fs = require('fs');
 
 // Try and load the docopt src for a command
 module.exports = function(args, done) {
