@@ -139,7 +139,7 @@ module.exports = function(args, done) {
     'install jshint module': installJSHintModule
   };
   if (args['--sublime']) {
-    tasks['register sublime plugins'] = registerSublimePlugins;
+    tasks['register sublime plugins'] = ['install jshint module', registerSublimePlugins];
     tasks['hide dot files in sublime'] = hideSublimeDotFiles;
   }
 
