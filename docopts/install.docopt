@@ -1,0 +1,9 @@
+Install development tools for mongodb-js.
+
+Usage:
+  mj install [--sublime] [-v]
+  mj install -h | --help
+
+Options:
+  -v, --verbose             Print detailed results
+  -h, --help                Print this help screen
