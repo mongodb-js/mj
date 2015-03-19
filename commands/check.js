@@ -5,10 +5,8 @@ var fs = require('fs'),
   glob = require('glob'),
   rimraf = require('rimraf'),
   Joi = require('joi'),
+  run_steps = require('../util/run_steps'),
   spawn = require('child_process').spawn,
-  clui = require('clui'),
-  clic = require('cli-color'),
-  symbols = require('../util/symbols'),
   debug = require('debug')('mj:check');
 
 // Checks for required files
@@ -162,26 +160,16 @@ var checkFirstRun = function(argv, done) {
 
 module.exports = function(argv, done) {
 
-  var spinner = new clui.Spinner('checking...');
-  spinner.start();
-
-  async.series({
+  var tasks = {
     'required files present': checkRequiredFilesExist.bind(null, argv),
     'package.json complete': checkPackage.bind(null, argv),
     'tests pass': checkFirstRun.bind(null, argv)
-  }, function(err, res) {
-      spinner.stop();
-      if (err) {
-        console.log(' ', clic.red(symbols.err), ' check failed:', err.message);
-        return done(err);
-      }
-      if (argv['--verbose']) {
-        Object.keys(res).forEach(function(test) {
-          console.log(' ', clic.green(symbols.ok), test);
-        });
-      } else {
-        console.log(' ', clic.green(symbols.ok), ' check ok');
-      }
-    });
+  };
 
+  var options = {
+    name: 'check',
+    verbose: true
+  };
+
+  run_steps(tasks, options, done);
 };
