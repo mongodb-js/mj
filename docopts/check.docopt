@@ -1,13 +1,29 @@
-Usage: 
-   mj check [--help] [<directory>] [options]
+Analyze the code health of a mongodb-js module.
+
+Usage:
+  mj check [-v] [<directory>]
+  mj check -h | --help
+
 
 Options:
+  -v, --verbose         Print detailed results
   -h, --help            Print this help screen
-  -t, --skip-tests      Skip check if tests pass
-  -d, --skip-docs       Skip check if documentation exists
-  -c, --skip-cover      Skip check if code coverage is complete
 
-Without any further options, "mj check" tests for several requirements:
-  - does "npm test" succeed?
-  - is there a non-empty README.* file, or a non-empty ./docs folder?
-  - is the code coverage 100%?
+
+Details:
+  In order to pass the check, a repo must fulfill the following rules.
+
+  1. It must contain certain files matching the following patterns:
+    - README*
+    - LICENSE
+    - .travis.yml
+    - .gitignore
+
+  2. The package.json file must be filled out. The following fields are
+     required: name, version, description, license, homepage, repository, 
+     bugs, author, dependencies, devDependencies.
+
+     More specific rules can be found in ./commands/check.js. 
+
+  3. Existing tests must pass via `npm test`, and if a `start` script is
+     defined in package.json, `npm start` must run without errors.

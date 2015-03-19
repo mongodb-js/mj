@@ -1,5 +1,9 @@
-Usage: 
-   mj [--version] [--help] <command> [<args>...]
+mongodb-js tooling.
+
+Usage:
+   mj <command> [<args>...]
+   mj --version
+   mj -h | --help
 
 Options:
    -h, --help     Print this help screen
@@ -9,6 +13,5 @@ Available commands are:
    create     Create a new mongodb-js repository
    ingest     Prepare ingestion of existing repository to mongodb-js
    help       Provide help on any command
-   
-See 'mj help <command>' for more information on a specific command.
 
+See 'mj help <command>' for more information on a specific command.
