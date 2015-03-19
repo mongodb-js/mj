@@ -1,13 +1,14 @@
-Usage: 
+Usage:
    mj help [--help] [<command>]
 
 Options:
    -h, --help     Print this help screen
 
 Available commands are:
-   check      Check if all requirements are met and tests pass
-   create     Create a new mongodb-js repository
-   ingest     Prepare ingestion of existing repository to mongodb-js
    help       Provide help on any command
+   check      Check if all requirements are met and tests pass
+   create     Create new mongodb-js repository from template
+   ingest     Prepare ingestion of existing repository to mongodb-js
+   demo       Demo for mj task execution using `async.auto`
 
 See 'mj help <command>' for more information on a specific command.
