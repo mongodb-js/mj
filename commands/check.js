@@ -168,7 +168,7 @@ module.exports = function(argv, done) {
 
   var options = {
     name: 'check',
-    verbose: true
+    verbose: argv['--verbose']
   };
 
   run_steps(tasks, options, done);
