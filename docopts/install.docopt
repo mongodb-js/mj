@@ -7,3 +7,20 @@ Usage:
 Options:
   -v, --verbose             Print detailed results
   -h, --help                Print this help screen
+
+Details:
+
+  This tool installs the `jshint` module globally with npm.
+
+  If the --sublime option is used, it will also register some
+  useful plugins with Sublime Package Control. The plugins are:
+
+    - Jade   Syntax Highlighting for .jade files (html templates)
+    - LESS   Syntax Highlighting for .less files (css meta-language)
+    - SublimeLinter    Detects common code and formatting issues
+    - SublimeLinter-jshint    jshint support for SublimeLinter
+    - jsfmt  automatically fixes formatting issues found by jshint
+    - Git    git support right out of Sublime Text
+
+  It will also add a setting to your preferences to hide dot (.*)
+  configuration files.
