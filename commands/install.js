@@ -7,6 +7,7 @@ var os = require('os'),
   symbols = require('../util/symbols'),
   child_process = require('child_process'),
   path = require('path'),
+  _ = require('lodash'),
   debug = require('debug')('mj:install');
 
 var sublime_plugins = [
@@ -18,9 +19,79 @@ var sublime_plugins = [
   'Git'
 ];
 
-function installSublimePlugins(done) {
+function findSublimeUsrLocation(suffix, done) {
+  var patterns = {
+    'darwin': function() {
+      return path.join(process.env.HOME, '/Library/Application Support/Sublime Text ?/Packages/User/');
+    },
+    'linux': function() {
+      return path.join(process.env.HOME, '/.config/sublime-text-?/Packages/User/');
+    },
+    'win32': function() {
+      return path.join(process.env.APPDATA, '\\AppData\\Roaming\\Sublime Text ?\\Packages\\User\\');
+    }
+  };
 
-  findSublimePkgLocation(function(err, config) {
+  // find app base path
+  var pattern = path.join(patterns[os.platform()](), suffix);
+  if (!pattern) {
+    return done(new Error('unknown platform, I can\'t find Sublime here.'));
+  }
+
+  glob(pattern, function(err, matches) {
+    if (err) return done(err);
+    if (matches.length === 0) {
+      return done(new Error('can\'t find Sublime Text installation.'));
+    }
+    // for multiple installations, pick the highest one (3)
+    var pcs_loc = matches.sort().reverse()[0];
+    done(null, pcs_loc);
+  });
+}
+
+function hideSublimeDotFiles(done) {
+
+  findSublimeUsrLocation('Preferences.sublime-settings', function(err, config) {
+    if (err) return done(err);
+
+    fs.readFile(config, 'utf8', function(err, content) {
+      if (err) return done(err);
+
+      var newContent = JSON.parse(content);
+      var modified = false;
+
+      if (!_.has(newContent, 'file_exclude_patterns')) {
+        newContent.file_exclude_patterns = ['.*'];
+        modified = true;
+      } else {
+        if (newContent.file_exclude_patterns.indexOf('.*') === -1) {
+          newContent.file_exclude_patterns.push('.*');
+          modified = true;
+        }
+      }
+
+      if (modified) {
+        var backup_file = config + '.mj-backup';
+        fs.exists(backup_file, function(exists) {
+          if (!exists) {
+            // create backup copy only if doesn't exist yet
+            debug('writing backup file', backup_file);
+            fs.writeFileSync(backup_file, content);
+          }
+        });
+      }
+
+      // write modified file back
+      fs.writeFile(config, JSON.stringify(newContent, null, '  '), function(err) {
+        done(err, modified);
+      });
+    });
+  });
+}
+
+function registerSublimePlugins(done) {
+
+  findSublimeUsrLocation('Package Control.sublime-settings', function(err, config) {
     if (err) return done(err);
 
     fs.readFile(config, 'utf8', function(err, content) {
@@ -57,33 +128,6 @@ function installSublimePlugins(done) {
   });
 }
 
-function findSublimePkgLocation(done) {
-  var patterns = {
-    'darwin': '/Library/Application Support/Sublime Text ?/Packages/User/Package Control.sublime-settings',
-    'linux': '/.config/sublime-text-?/Packages/User/Package Control.sublime-settings',
-    'windows': '\\AppData\\Roaming\\Sublime Text ?\\Packages\\User\\Package Control.sublime-settings'
-  };
-
-  // platform agnostic home path
-  var HOME = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
-
-  // find app base path
-  var pattern = patterns[os.platform()];
-  if (!pattern) {
-    return done(new Error('unknown platform, I can\'t find Sublime here.'));
-  }
-
-  glob(path.join(HOME, pattern), function(err, matches) {
-    if (err) return done(err);
-    if (matches.length === 0) {
-      return done(new Error('can\'t find Sublime Text installation.'));
-    }
-    // for multiple installations, pick the highest one (3)
-    var pcs_loc = matches.sort().reverse()[0];
-    done(null, pcs_loc);
-  });
-}
-
 function installJSHintModule(done) {
   // @todo: only install if not yet installed, return status
   child_process.exec('npm install -g jshint', done);
@@ -95,7 +139,8 @@ module.exports = function(args, done) {
     'install jshint module': installJSHintModule
   };
   if (args['--sublime']) {
-    tasks['register sublime plugins'] = installSublimePlugins;
+    tasks['register sublime plugins'] = registerSublimePlugins;
+    tasks['hide dot files in sublime'] = hideSublimeDotFiles;
   }
 
   var options = {
