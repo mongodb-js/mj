@@ -1,12 +1,13 @@
 'use strict';
 
-var debug = require('debug')('mj:install'),
-  os = require('os'),
+var os = require('os'),
   glob = require('glob'),
   fs = require('fs'),
   run_steps = require('../util/run_steps'),
+  symbols = require('../util/symbols'),
   child_process = require('child_process'),
-  path = require('path');
+  path = require('path'),
+  debug = require('debug')('mj:install');
 
 var sublime_plugins = [
   'Jade',
@@ -26,17 +27,18 @@ function installSublimePlugins(done) {
       if (err) return done(err);
 
       // add packages if not yet installed
+      var installedPlugins = [];
       var newContent = JSON.parse(content);
-      var modified = false;
+
       sublime_plugins.forEach(function(plugin) {
         if (newContent.installed_packages.indexOf(plugin) === -1) {
-          modified = true;
+          installedPlugins.push(plugin);
           newContent.installed_packages.push(plugin);
         }
       });
 
       // backup only if file was modified
-      if (modified) {
+      if (installedPlugins.length > 0) {
         var backup_file = config + '.mj-backup';
         fs.exists(backup_file, function(exists) {
           if (!exists) {
@@ -48,7 +50,9 @@ function installSublimePlugins(done) {
       }
 
       // write modified file back
-      fs.writeFile(config, JSON.stringify(newContent, null, '  '), done);
+      fs.writeFile(config, JSON.stringify(newContent, null, '  '), function(err) {
+        done(err, installedPlugins);
+      });
     });
   });
 }
@@ -81,6 +85,7 @@ function findSublimePkgLocation(done) {
 }
 
 function installJSHintModule(done) {
+  // @todo: only install if not yet installed, return status
   child_process.exec('npm install -g jshint', done);
 }
 
@@ -89,15 +94,19 @@ module.exports = function(args, done) {
   var tasks = {
     'install jshint module': installJSHintModule
   };
-
   if (args['--sublime']) {
-    tasks['install sublime plugins'] = installSublimePlugins;
+    tasks['register sublime plugins'] = installSublimePlugins;
   }
 
   var options = {
     name: 'install',
-    verbose: true
+    verbose: args['--verbose']
   };
 
-  run_steps(tasks, options, done);
+  run_steps(tasks, options, function(err, res) {
+    if (res['register sublime plugins'] && res['register sublime plugins'].length > 0) {
+      console.log(' ', symbols.warn, ' restart Sublime Text to install the new plugins');
+    }
+    done(err, res);
+  });
 };

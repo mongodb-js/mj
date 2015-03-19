@@ -15,6 +15,7 @@
     "docopt": "^0.6.0",
     "glob": "^5.0.2",
     "joi": "^6.0.8",
+    "lodash": "^3.5.0",
     "rimraf": "^2.3.2"
   },
   "devDependencies": {
