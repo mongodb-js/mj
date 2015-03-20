@@ -1,12 +1,12 @@
 var mj = require('../'),
-    loadDocopt = require('../util/load_docopt'),
-    assert = require('assert'),
-    async = require('async'),
-    exec = require('child_process').exec,
-    path = require('path'),
-    which = require('which'),
-    fs = require('fs'),
-    debug = require('debug')('mj:test');
+  loadDocopt = require('../util/load_docopt'),
+  assert = require('assert'),
+  async = require('async'),
+  exec = require('child_process').exec,
+  path = require('path'),
+  which = require('which'),
+  fs = require('fs'),
+  debug = require('debug')('mj:test');
 
 var BIN_MJ = path.resolve(__dirname, '../bin/mj.js');
 var NODE = which.sync('node');
@@ -44,8 +44,8 @@ function containsLineWith(text, str) {
     str = [str];
   }
   var lines = text.split('\n');
-  return str.every(function (s) {
-    return lines.some(function (l) {
+  return str.every(function(s) {
+    return lines.some(function(l) {
       return l.indexOf(s) !== -1;
     });
   });
@@ -71,58 +71,62 @@ describe('mj module', function() {
   // })
 });
 
-describe('mj cli', function () {
-  describe('--help', function (done) {
-    it('should contain help for usage, options, commands, pointer to `mj help`', function (done) {
-      run('help', function (err, stdout) {
-        if (err) throw err;
+describe('mj cli', function() {
+  describe('--help', function(done) {
+    it('should contain help for usage, options, commands, pointer to `mj help`', function(done) {
+      run('help', function(err, stdout) {
+        if (err)
+          throw err;
         // must contain lines with the following strings
         assert.ok(containsLineWith(stdout, [
           'Usage:',
           'Options:',
           'Available commands',
-          'mj help <command>' 
+          'mj help <command>'
         ]));
         done();
       });
     });
   });
 
-  describe('help', function () {
-    it('should return the main --help text if no arguments given', function (done) {
-      run('help', function (err, stdout) {
-        if (err) throw err;
+  describe('help', function() {
+    it('should return the main --help text if no arguments given', function(done) {
+      run('help', function(err, stdout) {
+        if (err)
+          throw err;
         assert.equal(strip(loadDocopt('main')), strip(stdout));
         done();
       });
     });
 
-    it('should output the correct help text when given a command', function (done) {
-      var tasks = Object.keys(mj).map(function (cmd) { 
-        return function (cb) {
-          run('help ' + cmd, function (err, stdout) {
-            if (err) cb(err);
+    it('should output the correct help text when given a command', function(done) {
+      var tasks = Object.keys(mj).map(function(cmd) {
+        return function(cb) {
+          run('help ' + cmd, function(err, stdout) {
+            if (err) {
+              cb(err);
+            }
             assert.ok(containsLineWith(stdout, [
-              'mj ' + cmd, 
+              'mj ' + cmd,
               'Usage:',
               'Options:',
               '-h, --help'
             ]));
             cb(null, 'ok');
-          })
-        }
+          });
+        };
       });
       async.parallel(tasks, done);
     });
   });
 
-  describe('check', function () {
-    it('should run successfully on mj itself', function (done) {
+  describe('check', function() {
+    it('should run successfully on mj itself', function(done) {
       // increase timeout for this test
       this.timeout(10000);
-      run('check', function (err, stdout) {
+      run('check', function(err, stdout) {
         assert.ifError(err);
-        assert.ok(containsLineWith(stdout, 'check ok'));
+        assert.ok(containsLineWith(stdout, 'check completed'));
         done();
       });
     });
