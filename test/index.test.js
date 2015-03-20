@@ -60,23 +60,13 @@ describe('mj module', function() {
   it('should be requireable', function() {
     assert(mj);
   });
-
-  // @todo: this is not working yet
-  //
-  // it('should be able to call commands programatically with a string', function (done) {
-  //   mj.create('--type cli', function (err, result) {
-  //     if (err) throw err;
-  //     done();
-  //   });
-  // })
 });
 
 describe('mj cli', function() {
-  describe('--help', function(done) {
+  describe('--help', function() {
     it('should contain help for usage, options, commands, pointer to `mj help`', function(done) {
       run('help', function(err, stdout) {
-        if (err)
-          throw err;
+        assert.ifError(err);
         // must contain lines with the following strings
         assert.ok(containsLineWith(stdout, [
           'Usage:',
@@ -92,8 +82,7 @@ describe('mj cli', function() {
   describe('help', function() {
     it('should return the main --help text if no arguments given', function(done) {
       run('help', function(err, stdout) {
-        if (err)
-          throw err;
+        assert.ifError(err);
         assert.equal(strip(loadDocopt('main')), strip(stdout));
         done();
       });
@@ -103,9 +92,7 @@ describe('mj cli', function() {
       var tasks = Object.keys(mj).map(function(cmd) {
         return function(cb) {
           run('help ' + cmd, function(err, stdout) {
-            if (err) {
-              cb(err);
-            }
+            assert.ifError(err);
             assert.ok(containsLineWith(stdout, [
               'mj ' + cmd,
               'Usage:',
