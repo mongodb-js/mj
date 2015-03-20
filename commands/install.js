@@ -41,7 +41,7 @@ function findSublimeUsrLocation(suffix, done) {
   glob(pattern, function(err, matches) {
     if (err) return done(err);
     if (matches.length === 0) {
-      return done(new Error('can\'t find Sublime Text installation.'));
+      return done(new Error('can\'t find `' + suffix + '`'));
     }
     // for multiple installations, pick the highest one (3)
     var pcs_loc = matches.sort().reverse()[0];
@@ -149,6 +149,9 @@ module.exports = function(args, done) {
   };
 
   run_steps(tasks, options, function(err, res) {
+    if (err && err.message === 'can\'t find `Package Control.sublime-settings`') {
+      console.log(' ', symbols.warn, ' make sure Package Control (https://packagecontrol.io/) is installed.');
+    }
     if (res['register sublime plugins'] && res['register sublime plugins'].length > 0) {
       console.log(' ', symbols.warn, ' restart Sublime Text to install the new plugins');
     }
