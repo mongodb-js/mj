@@ -1,7 +1,5 @@
-module.exports = function (args) {
-  // defaults
-  args['<directory>'] = args['<directory>'] || '.';
+'use strict';
 
-  // @todo: implementation
-  console.log(args);
-}
+module.exports = function(args, done) {
+  return done(new Error('Not implemented'));
+};
