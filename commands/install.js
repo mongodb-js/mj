@@ -7,7 +7,7 @@ var os = require('os'),
   symbols = require('../util/symbols'),
   child_process = require('child_process'),
   path = require('path'),
-  _ = require('lodash'),
+  has = require('amp-has'),
   debug = require('debug')('mj:install');
 
 var sublime_plugins = [
@@ -60,7 +60,7 @@ function hideSublimeDotFiles(done) {
       var newContent = JSON.parse(content);
       var modified = false;
 
-      if (!_.has(newContent, 'file_exclude_patterns')) {
+      if (!has(newContent, 'file_exclude_patterns')) {
         newContent.file_exclude_patterns = ['.*'];
         modified = true;
       } else {
