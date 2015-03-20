@@ -2,7 +2,7 @@
 
 var async = require('async'),
   clui = require('clui'),
-  _ = require('lodash'),
+  each = require('amp-each'),
   symbols = require('./symbols');
 
 /**
@@ -22,7 +22,7 @@ module.exports = function(tasks, options, done) {
 
   if (options.verbose) {
     // wrap all functions to output tickmarks
-    _.each(tasks, function(task, descr) {
+    each(tasks, function(task, descr) {
       var f = (typeof task === 'function') ? task : task[task.length - 1];
       var wrapped = function(done, results) {
         f(function(err, res) {
