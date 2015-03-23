@@ -1,8 +1,10 @@
-Usage: 
-   mj create [--help] [<directory>] [options]
+Usage:
+   mj create [<directory>] [options]
+   mj create -h | --help
 
 Options:
   -h, --help            Print this help screen
+  -v, --verbose         Print more verbose information
   -t, --type <type>     Type of app to create [default: empty]
 
 Creates a new app scaffold of the given type. Possible types are:

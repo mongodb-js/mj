@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "amp-defaults": "^1.0.1",
+    "amp-each": "^1.0.1",
+    "amp-has": "^1.0.1",
     "async": "^0.9.0",
     "cli-color": "^0.3.2",
     "clui": "^0.3.1",
