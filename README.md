@@ -18,6 +18,7 @@ Options:
    -h, --help     Print this help screen
 
 Available commands are:
+   install    Install development tools for mongodb-js
    check      Check if all requirements are met and tests pass
    create     Create a new mongodb-js repository
    ingest     Prepare ingestion of existing repository to mongodb-js
@@ -66,6 +67,8 @@ module.exports = function (args, done) {
 where `args` is the already docopt-parsed result of your `foobar.docopt` definitions, and `done` is the callback function to be called when the command finishes. Note that no validation has been performed on args, other than it matched one of the defined docopt definitions.
 
 Your command should exit either with `process.exit(0)` if everything was ok, or `process.exit(1)` if there was an error.
+
+`./util/run_steps.js` is a helper to excute multiple tasks within a command. These tasks can further depend on completion of previous tasks. It uses [`async.auto()`](https://github.com/caolan/async#autotasks-callback) to define task lists. Check out the `demo` command for an example. 
 
 ## License
 
