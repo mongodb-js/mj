@@ -19,6 +19,23 @@ var sublime_plugins = [
   'Git'
 ];
 
+/**
+ * Check if a module with `name` is installed globally.
+ *
+ * @param {String} name of the module, e.g. jshint
+ * @param {Function} fn (error, exists)
+ */
+function isModuleInstalledGlobally(name, fn) {
+  var cmd = 'npm ls --global --production --json --depth=0';
+  child_process.exec(cmd, function(err, stdout) {
+    if (err) return fn(err);
+
+    var data = JSON.parse(stdout);
+    var installed = data.dependencies[name];
+    fn(null, (installed !== undefined));
+  });
+}
+
 function findSublimeUsrLocation(suffix, done) {
   var patterns = {
     'darwin': function() {
@@ -129,8 +146,13 @@ function registerSublimePlugins(done) {
 }
 
 function installJSHintModule(done) {
-  // @todo: only install if not yet installed, return status
-  child_process.exec('npm install -g jshint', done);
+  isModuleInstalledGlobally('jshint', function(err, installed) {
+    if (err) return done(err);
+    if (!installed) {
+      child_process.exec('npm install -g jshint', done);
+    }
+    done(null, !installed);
+  });
 }
 
 module.exports = function(args, done) {
