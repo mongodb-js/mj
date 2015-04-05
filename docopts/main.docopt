@@ -9,6 +9,7 @@ Options:
    -h, --help     Print this help screen
 
 Available commands are:
+   install    Install development tools for mongodb-js
    check      Check if all requirements are met and tests pass
    create     Create a new mongodb-js repository
    ingest     Prepare ingestion of existing repository to mongodb-js
