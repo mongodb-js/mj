@@ -8,7 +8,7 @@ Available commands are:
    help       Provide help on any command
    check      Check if all requirements are met and tests pass
    create     Create new mongodb-js repository from template
-   ingest     Prepare ingestion of existing repository to mongodb-js
+   transfer   Transfer an existing project to mongodb-js
    demo       Demo for mj task execution using `async.auto`
 
 See 'mj help <command>' for more information on a specific command.

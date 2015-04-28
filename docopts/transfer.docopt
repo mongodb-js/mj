@@ -1,0 +1,16 @@
+Usage:
+   mj transfer [--help] [<directory>] [options]
+
+Options:
+  -h, --help            Print this help screen
+
+Prepares to add the repository at <directory> (default: .) to the mongodb-js organization:
+
+  1) runs mj check to make sure the project meets the orgs standards
+  2) creates a new GitHub issue to track progress and notify the community
+  3) makes mongodb-js the owner of the module on npm
+  4) adds the correct contributors to your package.json
+
+After running "mj ingest", you need to do:
+
+  1) @todo
