@@ -4,6 +4,11 @@ var run_steps = require('../util/run_steps');
 
 module.exports = function(args, done) {
 
+  /* demos how tasks dependent on each other can easily
+   * be implemented using async.auto()'s dependency model.
+   *
+   * all the tasks here are just simulations with a time delay.
+   */
   var tasks = {
     'get some data': function(callback) {
       setTimeout(function() {
@@ -23,8 +28,8 @@ module.exports = function(args, done) {
         setTimeout(function() {
           // once there is some data and the directory exists,
           // write the data to a file in the directory
-          callback(new Error('don\'t have write permissions')); // simulate an error
-          // callback(null, 'file written');
+          // callback(new Error('don\'t have write permissions')); // simulate an error
+          callback(null, 'file written');
         }, 2000);
       }
     ],
@@ -37,14 +42,14 @@ module.exports = function(args, done) {
             'file': results.write_file,
             'email': 'user@example.com'
           });
-        });
+        }, 1000);
       }
     ]
   };
 
   var options = {
-    name: 'create',
-    verbose: args['--verbose']
+    name: 'create',  // this name is used when --verbose is not set
+    verbose: args['--verbose']  // set verbosity or pass through from cli
   };
 
   run_steps(tasks, options, done);

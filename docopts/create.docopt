@@ -7,11 +7,13 @@ Options:
   -v, --verbose         Print more verbose information
   -t, --type <type>     Type of app to create [default: empty]
 
-Creates a new app scaffold of the given type. Possible types are:
+Creates a new scaffold of the given type. Possible types are:
 
+  - empty: an empty directory structure with the bare minimum to qualify as mongodb-js
   - cli: command-line interface app, like "mj"
-  - spa: single-page app, running exclusively in a browser
+  - view: an ampersand view module, e.g. a subview for a larger app
+  - spa: single-page application, running exclusively in a browser
   - full: full client/server app
   - util: a utility function, template or code snippet
   - doc: a non-code document, spec or documentation
-  - empty: an empty directory structure with the bare minumum to qualify as mongodb-js
+
