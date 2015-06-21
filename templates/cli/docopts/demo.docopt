@@ -1,0 +1,7 @@
+Usage:
+   {{slugcase name}} demo [options]
+   {{slugcase name}} demo -h | --help
+
+Options:
+  -h, --help            Print this help screen
+  -v, --verbose         Print more verbose information
