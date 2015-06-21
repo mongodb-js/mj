@@ -1,6 +1,6 @@
 'use strict';
 
-var run_steps = require('../util/run_steps');
+var executor = require('../util/executor');
 
 module.exports = function(args, done) {
 
@@ -52,5 +52,5 @@ module.exports = function(args, done) {
     verbose: args['--verbose']  // set verbosity or pass through from cli
   };
 
-  run_steps(tasks, options, done);
+  executor(tasks, options, done);
 };

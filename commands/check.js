@@ -5,7 +5,7 @@ var fs = require('fs'),
   glob = require('glob'),
   rimraf = require('rimraf'),
   Joi = require('joi'),
-  run_steps = require('../util/run_steps'),
+  executor = require('../util/executor'),
   spawn = require('child_process').spawn,
   debug = require('debug')('mj:check');
 
@@ -83,8 +83,8 @@ var checkPackage = function(argv, done) {
 };
 
 // If I clone this repo and run `npm install && npm test` does it work?
-// If there is an `npm start`, run that as well and make sure it stays up
-// for at least 5 seconds.
+// If there is an `npm start`, run that as well and make sure it stays
+// doesn't return an error.
 var checkFirstRun = function(argv, done) {
   function run(cmd) {
     return function(cb) {
@@ -171,5 +171,5 @@ module.exports = function(argv, done) {
     verbose: argv['--verbose']
   };
 
-  run_steps(tasks, options, done);
+  executor(tasks, options, done);
 };

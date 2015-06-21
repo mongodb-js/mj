@@ -3,7 +3,7 @@
 var os = require('os'),
   glob = require('glob'),
   fs = require('fs'),
-  run_steps = require('../util/run_steps'),
+  executor = require('../util/executor'),
   symbols = require('../util/symbols'),
   child_process = require('child_process'),
   path = require('path'),
@@ -170,7 +170,7 @@ module.exports = function(args, done) {
     verbose: args['--verbose']
   };
 
-  run_steps(tasks, options, function(err, res) {
+  executor(tasks, options, function(err, res) {
     if (err && err.message === 'can\'t find `Package Control.sublime-settings`') {
       console.log(' ', symbols.warn, ' make sure Package Control (https://packagecontrol.io/) is installed.');
     }
