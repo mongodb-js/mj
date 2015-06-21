@@ -41,12 +41,12 @@ module.exports = function(tasks, options, done) {
       }
     });
   } else {
-    spinner.start();
+    if (options.spinner) spinner.start();
   }
 
   async.auto(tasks, function(err, results) {
     if (!options.verbose) {
-      spinner.stop();
+      if (options.spinner) spinner.stop();
       if (err) {
         console.log(' ', symbols.err, ' ' + options.name + ' failed:', err.message);
       } else {
