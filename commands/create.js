@@ -55,6 +55,7 @@ module.exports = function(args, done) {
   var options = {
     name: 'create',  // this name is used when --verbose is not set
     verbose: args['--verbose'],  // set verbosity or pass through from cli
+    spinner: false, // turn off spinner because of khaos prompts
     success: format('new project with template "%s" created.', args['<template>'])
   };
 
