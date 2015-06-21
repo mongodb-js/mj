@@ -110,53 +110,56 @@ describe('mj cli', function() {
       async.parallel(tasks, done);
     });
   });
+});
 
-  describe('mj create', function() {
-    var testDir = path.join(TEST_DIR, 'test_module/');
+describe('mj create', function() {
+  this.timeout(10000);
 
-    afterEach(function() {
-      fs.exists(testDir, function(exists) {
-        if (exists) {
-          rimraf.sync(testDir);
-        }
-      });
+  var testDir = path.join(TEST_DIR, 'test_module/');
+
+  afterEach(function() {
+    fs.exists(testDir, function(exists) {
+      if (exists) {
+        rimraf.sync(testDir);
+      }
     });
+  });
 
-    it('should reject non-existing templates', function(done) {
-      run('create foo ./bar', function(err, stdout) {
-        // assert.ifError(err);
+  it('should reject non-existing templates', function(done) {
+    run('create foo ./bar', function(err, stdout) {
+      // assert.ifError(err);
+      assert.ok(containsLineWith(stdout,
+        'create failed: Unknown template "foo".'
+      ));
+      done();
+    });
+  });
+
+  it('should not create new projects in existing, non-empty directories', function(done) {
+    // make directory
+    fs.mkdir(testDir, function(err) {
+      assert.ifError(err);
+      var dummyfile = path.join(testDir, 'dummy_file.txt');
+      fs.closeSync(fs.openSync(dummyfile, 'w'));
+      assert.ok(fs.existsSync(dummyfile));
+      run('create empty ' + testDir, function(err, stdout) {
         assert.ok(containsLineWith(stdout,
-          'create failed: Unknown template "foo".'
+          format('create failed: destination directory %s is not empty.', path.resolve(testDir))
         ));
         done();
       });
     });
-
-    it('should not create new projects in existing, non-empty directories', function(done) {
-      // make directory
-      fs.mkdir(testDir, function(err) {
-        assert.ifError(err);
-        var dummyfile = path.join(testDir, 'dummy_file.txt');
-        fs.closeSync(fs.openSync(dummyfile, 'w'));
-        assert.ok(fs.existsSync(dummyfile));
-        run('create empty ' + testDir, function(err, stdout) {
-          assert.ok(containsLineWith(stdout,
-            format('create failed: destination directory %s is not empty.', path.resolve(testDir))
-          ));
-          done();
-        });
-      });
-    });
-
-    it.skip('should copy the template files', function(done) {
-      // can't test directly, need to provide answers to khaos.generate
-      // so that it doesn't prompt user
-
-      // run('create empty ' + testDir, function(err, stdout) {
-      //   assert.ok(fs.existsSync(path.join(testDir, 'package.json')));
-      //   done();
-      // });
-    });
   });
 
+  it.skip('should copy the template files', function(done) {
+    // can't test directly, need to provide answers to khaos.generate
+    // so that it doesn't prompt user
+
+    // run('create empty ' + testDir, function(err, stdout) {
+    //   assert.ok(fs.existsSync(path.join(testDir, 'package.json')));
+    //   done();
+    // });
+  });
 });
+
+
