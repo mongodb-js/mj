@@ -24,20 +24,20 @@ var checkRequiredFilesExist = function(argv, done) {
       glob(pattern, {
         cwd: dir
       }, function(err, files) {
-          debug('resolved %s for `%s`', files, pattern);
-          if (err) return cb(err);
-          if (files.length === 0) {
-            return done(new Error('missing required file matching ' + pattern));
-          }
-          if (files.length > 1) {
-            return done(new Error('more than one file matched ' + pattern));
-          }
+        debug('resolved %s for `%s`', files, pattern);
+        if (err) return cb(err);
+        if (files.length === 0) {
+          return done(new Error('missing required file matching ' + pattern));
+        }
+        if (files.length > 1) {
+          return done(new Error('more than one file matched ' + pattern));
+        }
 
-          fs.exists(files[0], function(exists) {
-            if (!exists) return done(new Error('missing required file matching ' + files[0]));
-            return cb(null, files[0]);
-          });
+        fs.exists(files[0], function(exists) {
+          if (!exists) return done(new Error('missing required file matching ' + files[0]));
+          return cb(null, files[0]);
         });
+      });
     };
   });
   async.parallel(tasks, done);
@@ -168,7 +168,8 @@ module.exports = function(argv, done) {
 
   var options = {
     name: 'check',
-    verbose: argv['--verbose']
+    verbose: argv['--verbose'],
+    spinner: true
   };
 
   executor(tasks, options, done);

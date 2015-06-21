@@ -167,7 +167,8 @@ module.exports = function(args, done) {
 
   var options = {
     name: 'install',
-    verbose: args['--verbose']
+    verbose: args['--verbose'],
+    spinner: true
   };
 
   executor(tasks, options, function(err, res) {
