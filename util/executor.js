@@ -16,6 +16,7 @@ module.exports = function(tasks, options, done) {
   // defaults
   options.name = options.name || '';
   options.verbose = !!options.verbose;
+  options.success = options.success || options.name + ' completed';
 
   // use spinner only if not --verbose
   var spinner = new clui.Spinner('running ' + options.name + '...');
@@ -50,7 +51,7 @@ module.exports = function(tasks, options, done) {
       if (err) {
         console.log(' ', symbols.err, ' ' + options.name + ' failed:', err.message);
       } else {
-        console.log(' ', symbols.ok, ' ' + options.success || (options.name + ' completed'));
+        console.log(' ', symbols.ok, ' ' + options.success);
       }
     }
     done(err, results);
