@@ -8,7 +8,7 @@ var async = require('async'),
 /**
  * executes steps in series (async) and outputs a red error or green checkmarks
  * @param  {object}   tasks     see `async.auto` documentation for tasks definition
- * @param  {object}   options   options object, can contain name, verbose
+ * @param  {object}   options   options object, can contain name, verbose, success
  * @param  {function} done      callback function(err, res)
  */
 module.exports = function(tasks, options, done) {
@@ -50,7 +50,7 @@ module.exports = function(tasks, options, done) {
       if (err) {
         console.log(' ', symbols.err, ' ' + options.name + ' failed:', err.message);
       } else {
-        console.log(' ', symbols.ok, ' ' + options.name + ' completed');
+        console.log(' ', symbols.ok, ' ' + options.success || (options.name + ' completed'));
       }
     }
     done(err, results);

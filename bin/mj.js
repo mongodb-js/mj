@@ -18,7 +18,7 @@ if (!mj.hasOwnProperty(cmd)) {
 mj[cmd](null, function(err, res) {
   debug('command returned', err, res);
   if (err) {
-    debug('error:', err.message);
+    debug('error: ', err.message);
     process.exit(1);
   }
   debug('ok');

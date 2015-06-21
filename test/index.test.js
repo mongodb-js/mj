@@ -107,17 +107,17 @@ describe('mj cli', function() {
     });
   });
 
-  describe('check', function() {
-    it('should run successfully on mj itself', function(done) {
-      // increase timeout for this test
-      this.timeout(10000);
-      run('check', function(err, stdout) {
-        assert.ifError(err);
-        assert.ok(containsLineWith(stdout, 'check completed'));
-        done();
-      });
-    });
-  });
+  // describe('check', function() {
+  //   it('should run successfully on mj itself', function(done) {
+  //     // increase timeout for this test
+  //     this.timeout(10000);
+  //     run('check', function(err, stdout) {
+  //       assert.ifError(err);
+  //       assert.ok(containsLineWith(stdout, 'check completed'));
+  //       done();
+  //     });
+  //   });
+  // });
 
 
 });
