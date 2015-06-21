@@ -2,7 +2,7 @@
 
 var async = require('async'),
   clui = require('clui'),
-  each = require('amp-each'),
+  _ = require('lodash'),
   symbols = require('./symbols');
 
 /**
@@ -23,7 +23,7 @@ module.exports = function(tasks, options, done) {
 
   if (options.verbose) {
     // wrap all functions to output tickmarks
-    each(tasks, function(task, descr) {
+    _.each(tasks, function(task, descr) {
       var f = (typeof task === 'function') ? task : task[task.length - 1];
       var wrapped = function(done, results) {
         f(function(err, res) {
@@ -42,12 +42,16 @@ module.exports = function(tasks, options, done) {
       }
     });
   } else {
-    if (options.spinner) spinner.start();
+    if (options.spinner) {
+      spinner.start();
+    }
   }
 
   async.auto(tasks, function(err, results) {
     if (!options.verbose) {
-      if (options.spinner) spinner.stop();
+      if (options.spinner) {
+        spinner.stop();
+      }
       if (err) {
         console.log(' ', symbols.err, ' ' + options.name + ' failed:', err.message);
       } else {
