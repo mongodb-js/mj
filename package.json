@@ -31,7 +31,16 @@
     "type": "git",
     "url": "https://github.com/mongodb-js/mj"
   },
-  "author": "Thomas Rückstieß <thomas@mongodb.com>",
+  "contributors": [
+    {
+      "name": "Lucas Hrabovsky",
+      "email": "lucas@mongodb.com"
+    },
+    {
+      "name": "Thomas Rueckstiess",
+      "email": "thomas@mongodb.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mongodb-js/mj/issues"

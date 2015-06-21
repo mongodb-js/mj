@@ -1,6 +1,6 @@
 'use strict';
 
-var executor = require('../util/executor');
+var taskmgr = require('../lib/taskmgr');
 
 module.exports = function(args, done) {
 
@@ -15,31 +15,31 @@ module.exports = function(args, done) {
   var tasks = {
     'get some data': function(callback) {
       setTimeout(function() {
-        // async code to get some data
-        callback(null, 'data', 'converted to array');
+        callback(null, 'data', 'in an array');
       }, 2000);
     },
     'make a folder': function(callback) {
       setTimeout(function() {
-        // async code to create a directory to store a file in
-        // this is run at the same time as getting the data
-        callback(null, 'folder');
+        // create a directory to store a file.
+        // this is run at the same time as 'getting the data'
+        callback(null, './test');
       }, 2000);
     },
     'write the file': [
-      'get some data', 'make a folder', function(callback) {
+      'get some data', // dependency
+      'make a folder', // dependency
+      function(callback) {
         setTimeout(function() {
           // once there is some data and the directory exists,
           // write the data to a file in the directory
-          // callback(new Error('don\'t have write permissions')); // simulate an error
-          callback(null, 'file written');
+          // callback(new Error('no write permissions'));  // or simulate an error
+          callback(null, 'somefile.txt');
         }, 2000);
       }
     ],
     'email the link': [
       'write the file', function(callback, results) {
         setTimeout(function() {
-          // once the file is written let's email a link to it...
           // results.write_file contains the filename returned by write_file.
           callback(null, {
             'file': results['write the file'],
@@ -47,20 +47,15 @@ module.exports = function(args, done) {
           });
         }, 1000);
       }
-    ],
-    'print info': [
-      'email the link', function(callback, results) {
-        console.log(results);
-        callback(null, 'done');
-      }
     ]
   };
 
   var options = {
     name: 'create', // this name is used when --verbose is not set
     verbose: args['--verbose'], // set verbosity or pass through from cli
-    spinner: true
+    success: 'demo executed successfully', // message printed on success
+    spinner: true // spinner active (only if --verbose is not set)
   };
 
-  executor(tasks, options, done);
+  taskmgr(tasks, options, done);
 };
