@@ -46,8 +46,7 @@ module.exports = function(args, done) {
       }
     ],
     'print info': [
-      'email the link',
-      function (callback, results) {
+      'email the link', function(callback, results) {
         console.log(results);
         callback(null, 'done');
       }
@@ -55,8 +54,9 @@ module.exports = function(args, done) {
   };
 
   var options = {
-    name: 'create',  // this name is used when --verbose is not set
-    verbose: args['--verbose']  // set verbosity or pass through from cli
+    name: 'create', // this name is used when --verbose is not set
+    verbose: args['--verbose'], // set verbosity or pass through from cli
+    spinner: true
   };
 
   executor(tasks, options, done);

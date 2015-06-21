@@ -1,16 +1,16 @@
-Usage: 
-   mj ingest [--help] [<directory>] [options]
+Usage:
+   mj submit [--help] [<directory>] [options]
 
 Options:
   -h, --help            Print this help screen
 
 Prepares to add the repository at <directory> (default: .) to the mongodb-js organization:
-  
+
   1) does x
   2) does y
   3) does z
 
-After running "mj ingest", you need to do:
+After running "mj submit", you need to do:
 
   1) a
   2) b
