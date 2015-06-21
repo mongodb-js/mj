@@ -39,10 +39,17 @@ module.exports = function(args, done) {
           // once the file is written let's email a link to it...
           // results.write_file contains the filename returned by write_file.
           callback(null, {
-            'file': results.write_file,
+            'file': results['write the file'],
             'email': 'user@example.com'
           });
         }, 1000);
+      }
+    ],
+    'print info': [
+      'email the link',
+      function (callback, results) {
+        console.log(results);
+        callback(null, 'done');
       }
     ]
   };
