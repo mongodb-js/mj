@@ -18,7 +18,7 @@
     "glob": "^5.0.2",
     "joi": "^6.0.8",
     "khaos": "^0.9.3",
-    "rimraf": "^2.3.2"
+    "rimraf": "^2.4.0"
   },
   "devDependencies": {
     "mocha": "^2.2.1",

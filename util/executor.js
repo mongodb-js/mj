@@ -54,7 +54,8 @@ module.exports = function(tasks, options, done) {
         console.log(' ', symbols.ok, ' ' + options.success);
       }
     }
-    done(err, results);
+    // don't propagate errors further
+    done(null, results);
   });
 
 };
