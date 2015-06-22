@@ -8,6 +8,8 @@ var which = require('which');
 var fs = require('fs');
 var debug = require('debug')('mj:test');
 var format = require('util').format;
+var rimraf = require('rimraf');
+var createCmd = require('../commands/create');
 
 var BIN_PATH = path.resolve(__dirname, '../bin/mj.js');
 var TEST_DIR = path.resolve(__dirname);
@@ -60,6 +62,17 @@ function strip(str) {
   return str.replace(/^\s+|\s+$/g, '');
 }
 
+function makeNonEmptyDir(testDir, callback) {
+  fs.mkdir(testDir, function(err) {
+    assert.ifError(err);
+    var dummyfile = path.join(testDir, 'dummy_file.txt');
+    fs.closeSync(fs.openSync(dummyfile, 'w'));
+    assert.ok(fs.existsSync(dummyfile));
+    callback(err);
+  });
+}
+
+
 describe('mj module', function() {
   it('should import correctly', function() {
     assert.ok(mj);
@@ -111,4 +124,86 @@ describe('mj help', function() {
     });
   });
 });
+
+describe('mj create', function() {
+  this.timeout(15000);
+
+  var testDir = path.join(TEST_DIR, 'test_module/');
+
+  afterEach(function(done) {
+    rimraf(testDir, done);
+  });
+
+  it('should reject non-existing templates', function(done) {
+    run('create foo ./bar', function(err, stdout) {
+      // assert.ifError(err);
+      assert.ok(containsLineWith(stdout,
+        'create failed: Unknown template "foo".'
+      ));
+      done();
+    });
+  });
+
+  it('should not create new project in existing, non-empty directory', function(done) {
+    // make directory
+    makeNonEmptyDir(testDir, function(err) {
+      assert.ifError(err);
+      run('create empty ' + testDir, function(err, stdout) {
+        assert.ok(containsLineWith(stdout,
+          format('create failed: destination directory %s is not empty.', path.resolve(testDir))
+        ));
+        done();
+      });
+    });
+  });
+
+  it('should create new project in existing, non-empty directory with --force', function(done) {
+    // make directory
+    makeNonEmptyDir(testDir, function(err) {
+      // fixture for create command args
+      var args = {
+        '<directory>': testDir,
+        '<template>': 'empty',
+        '--force': true,
+        options: {
+          quiet: true
+        },
+        answers: {
+          name: 'testName',
+          description: 'testDescription'
+        }
+      };
+
+      createCmd(args, function(err) {
+        assert.ifError(err);
+        assert.ok(fs.existsSync(path.join(testDir, 'package.json')));
+        done();
+      });
+    });
+  });
+
+  it('should copy the template files', function(done) {
+    // fixture for create command args
+    var args = {
+      '<directory>': testDir,
+      '<template>': 'empty',
+      options: {
+        quiet: true
+      },
+      answers: {
+        name: 'testName',
+        description: 'testDescription'
+      }
+    };
+
+    createCmd(args, function(err) {
+      assert.ifError(err);
+      assert.ok(fs.existsSync(path.join(testDir, 'package.json')));
+      done();
+    });
+  });
+});
+
+
+
 
