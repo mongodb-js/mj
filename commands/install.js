@@ -3,11 +3,11 @@
 var os = require('os'),
   glob = require('glob'),
   fs = require('fs'),
-  executor = require('../util/executor'),
-  symbols = require('../util/symbols'),
+  taskmgr = require('../lib/taskmgr'),
+  symbols = require('../lib/symbols'),
   child_process = require('child_process'),
   path = require('path'),
-  has = require('amp-has'),
+  _ = require('lodash'),
   debug = require('debug')('mj:install');
 
 var sublime_plugins = [
@@ -77,7 +77,7 @@ function hideSublimeDotFiles(done) {
       var newContent = JSON.parse(content);
       var modified = false;
 
-      if (!has(newContent, 'file_exclude_patterns')) {
+      if (!_.has(newContent, 'file_exclude_patterns')) {
         newContent.file_exclude_patterns = ['.*'];
         modified = true;
       } else {
@@ -171,7 +171,7 @@ module.exports = function(args, done) {
     spinner: true
   };
 
-  executor(tasks, options, function(err, res) {
+  taskmgr(tasks, options, function(err, res) {
     if (err && err.message === 'can\'t find `Package Control.sublime-settings`') {
       console.log(' ', symbols.warn, ' make sure Package Control (https://packagecontrol.io/) is installed.');
     }

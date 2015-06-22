@@ -1,18 +1,19 @@
 'use strict';
 
-var fs = require('fs'),
-  async = require('async'),
-  glob = require('glob'),
-  rimraf = require('rimraf'),
-  Joi = require('joi'),
-  executor = require('../util/executor'),
-  spawn = require('child_process').spawn,
-  debug = require('debug')('mj:check');
+var fs = require('fs');
+var async = require('async');
+var glob = require('glob');
+var rimraf = require('rimraf');
+var Joi = require('joi');
+var taskmgr = require('../lib/taskmgr');
+var spawn = require('child_process').spawn;
+var path = require('path');
+var debug = require('debug')('mj:check');
 
 // Checks for required files
-var checkRequiredFilesExist = function(argv, done) {
-  debug('checking required files', argv);
-  var dir = argv['<directory>'];
+var checkRequiredFilesExist = function(args, done) {
+  debug('checking required files with args', args);
+  var dir = path.resolve(args['<directory>']);
 
   var tasks = [
     'README*',
@@ -44,12 +45,12 @@ var checkRequiredFilesExist = function(argv, done) {
 };
 
 // Check package.json conforms
-var checkPackage = function(argv, done) {
-  var dir = argv['<directory>'],
+var checkPackage = function(args, done) {
+  var dir = path.resolve(args['<directory>']),
     pkg;
 
   try {
-    pkg = require(dir + '/package.json');
+    pkg = require(path.join(dir, 'package.json'));
   } catch (e) {
     return process.nextTick(done.bind(null, e));
   }
@@ -84,8 +85,8 @@ var checkPackage = function(argv, done) {
 
 // If I clone this repo and run `npm install && npm test` does it work?
 // If there is an `npm start`, run that as well and make sure it stays
-// doesn't return an error.
-var checkFirstRun = function(argv, done) {
+// up for 5 seconds and doesn't return an error.
+var checkFirstRun = function(args, done) {
   function run(cmd) {
     return function(cb) {
       debug('testing `%s`', cmd);
@@ -95,7 +96,7 @@ var checkFirstRun = function(argv, done) {
         completed = false;
 
       var child = spawn(bin, args, {
-        cwd: argv['<directory>']
+        cwd: args['<directory>']
       })
         .on('error', function(err) {
           completed = true;
@@ -129,11 +130,12 @@ var checkFirstRun = function(argv, done) {
   debug('checking first run');
 
   var pkg,
-    dir = argv['<directory>'];
+    dir = path.resolve(args['<directory>']);
 
   try {
-    pkg = require(dir + '/package.json');
+    pkg = require(path.join(dir, 'package.json'));
   } catch (e) {
+    debug('fooo');
     return process.nextTick(done.bind(null, e));
   }
 
@@ -158,19 +160,23 @@ var checkFirstRun = function(argv, done) {
   });
 };
 
-module.exports = function(argv, done) {
+module.exports = function(args, done) {
+  // defaults
+  args['<directory>'] = args['<directory>'] || '.';
+
+  debug('global options', args);
 
   var tasks = {
-    'required files present': checkRequiredFilesExist.bind(null, argv),
-    'package.json complete': checkPackage.bind(null, argv),
-    'tests pass': checkFirstRun.bind(null, argv)
+    'required files present': checkRequiredFilesExist.bind(null, args),
+    'package.json complete': checkPackage.bind(null, args),
+    'tests pass': checkFirstRun.bind(null, args)
   };
 
   var options = {
     name: 'check',
-    verbose: argv['--verbose'],
+    verbose: args['--verbose'],
     spinner: true
   };
 
-  executor(tasks, options, done);
+  taskmgr(tasks, options, done);
 };

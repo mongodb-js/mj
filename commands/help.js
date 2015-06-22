@@ -1,12 +1,13 @@
 'use strict';
 
 var fs = require('fs');
+var path = require('path');
 
 // Try and load the docopt src for a command
 module.exports = function(args, done) {
   // make `mj help` (no additional arguments) behave like `mj --help`
-  var cmd = args['<command>'] || 'main';
-  var src = __dirname + '/../docopts/' + cmd + '.docopt';
+  var cmd = args['<command>'] || '_main';
+  var src = path.join(__dirname, '../docopts/', cmd + '.docopt');
 
   fs.exists(src, function(exists) {
     if (!exists) {

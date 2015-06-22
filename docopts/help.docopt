@@ -6,9 +6,9 @@ Options:
 
 Available commands are:
    help       Provide help on any command
+   install    Install development tools for mongodb-js
+   create     Create a new mongodb-js module from a template
    check      Check if all requirements are met and tests pass
-   create     Create new mongodb-js repository from template
    submit     Prepare submission of existing repository to mongodb-js
-   demo       Demo for mj task execution using `async.auto`
 
 See 'mj help <command>' for more information on a specific command.

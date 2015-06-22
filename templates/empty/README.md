@@ -29,5 +29,6 @@ You've chosen the _empty_ template. This template only adds the bare essentials 
 - [ ] Make sure the tests pass with `npm test`.
 - [ ] Double-check that you agree with the Contributor instructions in `./CONTRIBUTING.md`.
 - [ ] Double-check that this module should be published under the Apache-2.0 license in `./LICENSE`.
+- [ ] Run `mj check` to make sure all conditions for submission are fulfilled.
 
 Once you're ready, use `mj submit` to submit your module to the mongodb-js organization. 
