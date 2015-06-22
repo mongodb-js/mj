@@ -1,7 +1,0 @@
-Usage:
-   mj demo [options]
-   mj demo -h | --help
-
-Options:
-  -h, --help            Print this help screen
-  -v, --verbose         Print more verbose information
