@@ -3,6 +3,7 @@ Usage:
    mj create -h | --help
 
 Options:
+  --force               Forces copy, overwrites existing files
   -h, --help            Print this help screen
   -v, --verbose         Print more verbose information
 
