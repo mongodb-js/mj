@@ -128,10 +128,6 @@ describe('mj create', function() {
 
   var testDir = path.join(TEST_DIR, 'test_module/');
 
-  beforeEach(function() {
-    assert.ok(!fs.existsSync(testDir));
-  });
-
   afterEach(function(done) {
     rimraf(testDir, done);
   });
