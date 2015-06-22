@@ -8,8 +8,16 @@ var async = require('async'),
 /**
  * executes steps in series (async) and outputs a red error or green checkmarks
  * @param  {object}   tasks     see `async.auto` documentation for tasks definition
- * @param  {object}   options   options object, can contain name, verbose, success
+ * @param  {object}   options   options object, see below
  * @param  {function} done      callback function(err, res)
+ *
+ *
+ * options.name      {string}     name to use for overall task when not using --verbose
+ * options.verbose   {boolean}    print individual task steps if true
+ * options.spinner   {boolean}    print spinner during execution, only if verbose is false
+ * options.success   {string}     print this message if set, else "`name` completed"
+ * options.quiet     {boolean}    print absolutely nothing, overwrites all other options
+ *
  */
 module.exports = function(tasks, options, done) {
 
@@ -28,9 +36,13 @@ module.exports = function(tasks, options, done) {
       var wrapped = function(done, results) {
         f(function(err, res) {
           if (err) {
-            console.log(' ', symbols.err, ' ' + descr + ' failed:', err.message);
+            if (!options.quiet) {
+              console.log(' ', symbols.err, ' ' + descr + ' failed:', err.message);
+            }
           } else {
-            console.log(' ', symbols.ok, ' ' + descr);
+            if (!options.quiet) {
+              console.log(' ', symbols.ok, ' ' + descr);
+            }
           }
           done(err, res);
         }, results);
@@ -42,20 +54,24 @@ module.exports = function(tasks, options, done) {
       }
     });
   } else {
-    if (options.spinner) {
+    if (options.spinner && (!options.quiet)) {
       spinner.start();
     }
   }
 
   async.auto(tasks, function(err, results) {
     if (!options.verbose) {
-      if (options.spinner) {
+      if (options.spinner && (!options.quiet)) {
         spinner.stop();
       }
       if (err) {
-        console.log(' ', symbols.err, ' ' + options.name + ' failed:', err.message);
+        if (!options.quiet) {
+          console.log(' ', symbols.err, ' ' + options.name + ' failed:', err.message);
+        }
       } else {
-        console.log(' ', symbols.ok, ' ' + options.success);
+        if (!options.quiet) {
+          console.log(' ', symbols.ok, ' ' + options.success);
+        }
       }
     }
     // don't propagate errors further

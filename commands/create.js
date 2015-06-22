@@ -41,7 +41,7 @@ module.exports = function(args, done) {
     'destination': function(callback) {
       fs.readdir(args['<directory>'], function(err, files) {
         // error here means it does not exist, which is good.
-        if (err) return callback(null, args['<directory>']);
+        if (err || args['--force']) return callback(null, args['<directory>']);
         if ((files.length) > 0) return callback(new Error(format('destination ' +
             'directory %s is not empty.', path.resolve(args['<directory>']))));
         return callback(null, args['<directory>']);
@@ -99,10 +99,10 @@ module.exports = function(args, done) {
       khaos.read(function(err, files) {
         khaos.parse(files, function(err, schema) {
           // only prompt for new variables
-          var newVars = _.omit(schema, _.keys(results[parent]));
+          var newVars = _.omit(schema, _.keys(results[parent] || args.answers));
           khaos.prompt(newVars, function(err, answers) {
             // merge new answers with existing ones and pass to next template
-            answers = _.merge(answers, results[parent] || {});
+            answers = _.merge(answers, results[parent] || args.answers || {});
             khaos.write(results.destination, files, answers, function(err) {
               callback(err, answers);
             });
@@ -121,12 +121,12 @@ module.exports = function(args, done) {
     curr = parent;
   }
 
-  var options = {
+  var options = _.defaults(args.options || {}, {
     name: 'create', // this name is used when --verbose is not set
     verbose: args['--verbose'], // set verbosity or pass through from cli
     spinner: false, // turn off spinner because of khaos prompts
     success: format('new project with template "%s" created.', args['<template>'])
-  };
+  });
 
   executor(tasks, options, done);
 };

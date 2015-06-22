@@ -1,4 +1,5 @@
 var mj = require('../');
+var createCmd = require('../commands/create');
 var loadDocopt = require('../util/load_docopt');
 var assert = require('assert');
 var async = require('async');
@@ -60,6 +61,16 @@ function strip(str) {
   return str.replace(/^\s+|\s+$/g, '');
 }
 
+function makeNonEmptyDir(testDir, callback) {
+  fs.mkdir(testDir, function(err) {
+    assert.ifError(err);
+    var dummyfile = path.join(testDir, 'dummy_file.txt');
+    fs.closeSync(fs.openSync(dummyfile, 'w'));
+    assert.ok(fs.existsSync(dummyfile));
+    callback(err);
+  });
+}
+
 describe('mj module', function() {
   it('should be requireable', function() {
     assert(mj);
@@ -113,16 +124,16 @@ describe('mj cli', function() {
 });
 
 describe('mj create', function() {
-  this.timeout(10000);
+  this.timeout(15000);
 
   var testDir = path.join(TEST_DIR, 'test_module/');
 
-  afterEach(function() {
-    fs.exists(testDir, function(exists) {
-      if (exists) {
-        rimraf.sync(testDir);
-      }
-    });
+  beforeEach(function() {
+    assert.ok(!fs.existsSync(testDir));
+  });
+
+  afterEach(function(done) {
+    rimraf(testDir, done);
   });
 
   it('should reject non-existing templates', function(done) {
@@ -135,13 +146,10 @@ describe('mj create', function() {
     });
   });
 
-  it('should not create new projects in existing, non-empty directories', function(done) {
+  it('should not create new project in existing, non-empty directory', function(done) {
     // make directory
-    fs.mkdir(testDir, function(err) {
+    makeNonEmptyDir(testDir, function(err) {
       assert.ifError(err);
-      var dummyfile = path.join(testDir, 'dummy_file.txt');
-      fs.closeSync(fs.openSync(dummyfile, 'w'));
-      assert.ok(fs.existsSync(dummyfile));
       run('create empty ' + testDir, function(err, stdout) {
         assert.ok(containsLineWith(stdout,
           format('create failed: destination directory %s is not empty.', path.resolve(testDir))
@@ -151,14 +159,50 @@ describe('mj create', function() {
     });
   });
 
-  it.skip('should copy the template files', function(done) {
-    // can't test directly, need to provide answers to khaos.generate
-    // so that it doesn't prompt user
+  it('should create new project in existing, non-empty directory with --force', function(done) {
+    // make directory
+    makeNonEmptyDir(testDir, function(err) {
+      // fixture for create command args
+      var args = {
+        '<directory>': testDir,
+        '<template>': 'empty',
+        '--force': true,
+        options: {
+          quiet: true
+        },
+        answers: {
+          name: 'testName',
+          description: 'testDescription'
+        }
+      };
 
-    // run('create empty ' + testDir, function(err, stdout) {
-    //   assert.ok(fs.existsSync(path.join(testDir, 'package.json')));
-    //   done();
-    // });
+      createCmd(args, function(err) {
+        assert.ifError(err);
+        assert.ok(fs.existsSync(path.join(testDir, 'package.json')));
+        done();
+      });
+    });
+  });
+
+  it('should copy the template files', function(done) {
+    // fixture for create command args
+    var args = {
+      '<directory>': testDir,
+      '<template>': 'empty',
+      options: {
+        quiet: true
+      },
+      answers: {
+        name: 'testName',
+        description: 'testDescription'
+      }
+    };
+
+    createCmd(args, function(err) {
+      assert.ifError(err);
+      assert.ok(fs.existsSync(path.join(testDir, 'package.json')));
+      done();
+    });
   });
 });
 
