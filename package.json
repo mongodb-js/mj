@@ -24,7 +24,9 @@
     "which": "^1.0.9"
   },
   "scripts": {
-    "test": "mocha"
+    "check": "jshint",
+    "test": "mocha",
+    "ci": "npm run check && npm test"
   },
   "repository": {
     "type": "git",
