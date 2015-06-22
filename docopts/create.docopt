@@ -10,10 +10,10 @@ Options:
 Creates a new scaffold of the given <template> in specified <directory> (default is
 current directory). Possible choices <for template> are:
 
-empty  directory structure with the bare minimum to qualify as mongodb-js.
-cli    command-line interface tool, like "mj".
-view   ampersand view module, e.g. a subview for a larger app.
-spa    single-page application, running exclusively in a browser.
-full   full client/server app.
-util   utility function, template or code snippet.
-doc    non-code document, spec or documentation.
+  empty   directory structure with the bare minimum to qualify as mongodb-js.
+  cli     command-line interface tool, like "mj".
+  view    ampersand view module, e.g. a subview for a larger app.
+  spa     single-page application, running exclusively in a browser.
+  full    full client/server app.
+  util    utility function, template or code snippet.
+  doc     non-code document, spec or documentation.
