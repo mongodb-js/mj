@@ -12,6 +12,7 @@ var async = require('async'),
  * @param  {function} done      callback function(err, res)
  *
  *
+ * the following options are available
  * options.name      {string}     name to use for overall task when not using --verbose
  * options.verbose   {boolean}    print individual task steps if true
  * options.spinner   {boolean}    print spinner during execution, only if verbose is false

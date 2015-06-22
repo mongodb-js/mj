@@ -51,7 +51,7 @@ module.exports = function(args, done) {
   };
 
   var options = {
-    name: 'create', // this name is used when --verbose is not set
+    name: 'demo', // this name is used when --verbose is not set
     verbose: args['--verbose'], // set verbosity or pass through from cli
     success: 'demo executed successfully', // message printed on success
     spinner: true // spinner active (only if --verbose is not set)
