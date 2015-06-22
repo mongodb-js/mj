@@ -7,7 +7,7 @@ var path = require('path');
 var fs = require('fs');
 var _ = require('lodash');
 var shell = require('shelljs');
-var executor = require('../util/executor');
+var taskmgr = require('../lib/taskmgr');
 var which = require('which');
 
 // Template dependency tree
@@ -128,5 +128,5 @@ module.exports = function(args, done) {
     success: format('new project with template "%s" created.', args['<template>'])
   });
 
-  executor(tasks, options, done);
+  taskmgr(tasks, options, done);
 };

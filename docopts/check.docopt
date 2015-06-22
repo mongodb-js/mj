@@ -13,17 +13,17 @@ Options:
 Details:
   In order to pass the check, a repo must fulfill the following rules.
 
-  1. It must contain certain files matching the following patterns:
+  1. It must contain files matching the following patterns:
     - README*
     - LICENSE
     - .travis.yml
     - .gitignore
 
   2. The package.json file must be filled out. The following fields are
-     required: name, version, description, license, homepage, repository, 
+     required: name, version, description, license, homepage, repository,
      bugs, author, dependencies, devDependencies.
 
-     More specific rules can be found in ./commands/check.js. 
+     More specific rules can be found in ./commands/check.js.
 
   3. Existing tests must pass via `npm test`, and if a `start` script is
      defined in package.json, `npm start` must run without errors.

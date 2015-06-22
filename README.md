@@ -68,7 +68,7 @@ where `args` is the already docopt-parsed result of your `foobar.docopt` definit
 
 Your command should exit either with `process.exit(0)` if everything was ok, or `process.exit(1)` if there was an error.
 
-`./util/executor.js` is a helper to excute multiple tasks within a command. These tasks can further depend on completion of previous tasks. It uses [`async.auto()`](https://github.com/caolan/async#autotasks-callback) to define task lists. Check out the `demo` command for an example. 
+`./lib/taskmgr.js` is a helper to excute multiple tasks within a command. These tasks can further depend on completion of previous tasks. It uses [`async.auto()`](https://github.com/caolan/async#autotasks-callback) to define task lists. Check out the `demo` command for an example. 
 
 ## License
 

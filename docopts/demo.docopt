@@ -1,5 +1,5 @@
 Usage:
-   mj demo [-v]
+   mj demo [options]
    mj demo -h | --help
 
 Options:

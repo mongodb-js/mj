@@ -9,10 +9,10 @@ Options:
    -h, --help     Print this help screen
 
 Available commands are:
-   install    Install development tools for mongodb-js
-   check      Check if all requirements are met and tests pass
-   create     Create a new mongodb-js repository
-   submit     Prepare submission of existing repository to mongodb-js
    help       Provide help on any command
+   install    Install development tools for mongodb-js
+   create     Create a new mongodb-js module from a template
+   check      Check if all requirements are met and tests pass
+   submit     Prepare submission of existing repository to mongodb-js
 
 See 'mj help <command>' for more information on a specific command.
