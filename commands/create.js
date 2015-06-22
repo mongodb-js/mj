@@ -6,8 +6,9 @@ var Khaos = require('khaos');
 var path = require('path');
 var fs = require('fs');
 var _ = require('lodash');
-var inspect = require('util').inspect;
+var exec = require('child_process').exec;
 var executor = require('../util/executor');
+var which = require('which');
 
 // Template dependency tree
 var templateDeps = {
@@ -21,14 +22,10 @@ var templateDeps = {
 };
 
 
-var answerPlugin = function(answers) {
-  return function drafts(files, metalsmith, done) {
-    _.assign(answers, metalsmith._metadata);
-    done();
-  };
-};
-
 module.exports = function(args, done) {
+
+  var GIT = which.sync('git');
+  var NPM = which.sync('npm');
 
   var tasks = {
     /**
@@ -53,17 +50,50 @@ module.exports = function(args, done) {
             'directory %s is not empty.', path.resolve(args['<directory>']))));
         return callback(null, args['<directory>']);
       });
-    }
+    },
+
+    /**
+     * after templates are copied, run git init, add, commit and npm install
+     */
+    'git init': [
+      'destination', args['<template>'], function(callback, results) {
+        process.chdir(results.destination);
+        exec(format('%s init .', GIT), callback);
+      }
+    ],
+    'git add': [
+      'git init', function(callback) {
+        exec(format('%s add .', GIT), callback);
+      }
+    ],
+    'git commit': [
+      'git add', function(callback) {
+        exec(format('%s commit -a -m "initial commit"', GIT), callback);
+      }
+    ],
+    'npm install': [
+      'git commit', function(callback) {
+        exec(format('%s install', NPM), callback);
+      }
+    ]
   };
 
-  // add khaos.generate tasks for each template in the dependency tree
+  // add khaos tasks for each template in the dependency tree
   var generateTemplate = function(template, parent) {
     return function(callback, results) {
-      var answers = {};
-      var khaos = new Khaos(path.join(__dirname, '../templates/', template))
-        .after(answerPlugin(answers));
-      khaos.generate(results.destination, parent ? results[parent] : null, function(err) {
-        callback(err, answers);
+      var khaos = new Khaos(path.join(__dirname, '../templates/', template));
+      khaos.read(function(err, files) {
+        khaos.parse(files, function(err, schema) {
+          // only prompt for new variables
+          var newVars = _.omit(schema, _.keys(results[parent]));
+          khaos.prompt(newVars, function(err, answers) {
+            // merge new answers with existing ones and pass to next template
+            answers = _.merge(answers, results[parent] || {});
+            khaos.write(results.destination, files, answers, function(err) {
+              callback(err, answers);
+            });
+          });
+        });
       });
     };
   };
