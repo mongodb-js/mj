@@ -9,7 +9,7 @@ var fs = require('fs');
 var debug = require('debug')('{{slugcase name}}:test');
 var format = require('util').format;
 
-var BIN_PATH = path.resolve(__dirname, '../bin/{{slugcase name}}');
+var BIN_PATH = path.resolve(__dirname, '../bin/{{slugcase name}}.js');
 var TEST_DIR = path.resolve(__dirname);
 var NODE = which.sync('node');
 var COMMANDS = fs.readdirSync(path.join(__dirname, '../commands/')).map(function(cmd) {

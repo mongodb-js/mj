@@ -1,6 +1,7 @@
 {
   "name": "{{slugcase name}}",
   "description": "{{description}}",
+  "author": "{{author}}",
   "version": "0.0.0",
   "scripts": {
     "check": "jshint",
