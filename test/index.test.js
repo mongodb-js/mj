@@ -170,7 +170,8 @@ describe('mj create', function() {
         },
         answers: {
           name: 'testName',
-          description: 'testDescription'
+          description: 'testDescription',
+          author: 'Santa Claus'
         }
       };
 
@@ -192,7 +193,8 @@ describe('mj create', function() {
       },
       answers: {
         name: 'testName',
-        description: 'testDescription'
+        description: 'testDescription',
+        author: 'Santa Claus'
       }
     };
 
