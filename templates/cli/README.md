@@ -66,9 +66,11 @@ The "demo" command shows how this feature can be used.
 
 ## Checklist before you publish your module
 
-- [ ] Remove everything in this `./README.md` file below the `---`
+- [ ] Add a good description, example and a high-level code overview for contributors to this `./README.md`.
+- [ ] Remove everything in this `./README.md` below the `---`.
 - [ ] Delete the `./docopts/demo.docopt` and `./commands/demo.js` files
-- [ ] Double-check that you agree with the Contributor instructions in `./CONTRIBUTING.md`
+- [ ] Make sure the tests pass with `npm test`.
+- [ ] Double-check that you agree with the Contributor instructions in `./CONTRIBUTING.md`.
 - [ ] Double-check that this module should be published under the Apache-2.0 license in `./LICENSE`
 
 Once you're ready, use `mj submit` to submit your module to the mongodb-js organization. 
