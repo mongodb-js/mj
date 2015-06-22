@@ -6,12 +6,12 @@ var Khaos = require('khaos');
 var path = require('path');
 var fs = require('fs');
 var _ = require('lodash');
-var exec = require('child_process').exec;
+var shell = require('shelljs');
 var executor = require('../util/executor');
 var which = require('which');
 
 // Template dependency tree
-var templateDeps = {
+var templateDependencies = {
   empty: null,
   cli: 'empty',
   view: 'empty',
@@ -21,18 +21,14 @@ var templateDeps = {
   full: 'spa'
 };
 
-
 module.exports = function(args, done) {
-
-  var GIT = which.sync('git');
-  var NPM = which.sync('npm');
 
   var tasks = {
     /**
      * make sure the template exists.
      */
     'template': function(callback) {
-      if (Object.keys(templateDeps).indexOf(args['<template>']) === -1) {
+      if (Object.keys(templateDependencies).indexOf(args['<template>']) === -1) {
         return callback(new Error(format('Unknown template "%s". Run ' +
           '`mj help create` for list of valid templates.', args['<template>'])));
       }
@@ -55,25 +51,43 @@ module.exports = function(args, done) {
     /**
      * after templates are copied, run git init, add, commit and npm install
      */
+    'git': function(callback) {
+      which('git', callback);
+    },
+    'npm': function(callback) {
+      which('npm', callback);
+    },
     'git init': [
-      'destination', args['<template>'], function(callback, results) {
-        process.chdir(results.destination);
-        exec(format('%s init .', GIT), callback);
+      'git', 'destination', args['<template>'], function(callback, results) {
+        shell.cd(results.destination);
+        shell.exec('git init .', {
+          silent: true,
+          async: true
+        }, callback);
       }
     ],
     'git add': [
-      'git init', function(callback) {
-        exec(format('%s add .', GIT), callback);
+      'git', 'git init', function(callback) {
+        shell.exec('git add .', {
+          silent: true,
+          async: true
+        }, callback);
       }
     ],
     'git commit': [
-      'git add', function(callback) {
-        exec(format('%s commit -a -m "initial commit"', GIT), callback);
+      'git', 'git add', function(callback) {
+        shell.exec('git commit -a -m "initial commit"', {
+          silent: true,
+          async: true
+        }, callback);
       }
     ],
     'npm install': [
-      'git commit', function(callback) {
-        exec(format('%s install', NPM), callback);
+      'npm', 'git commit', function(callback) {
+        shell.exec('npm install', {
+          silent: true,
+          async: true
+        }, callback);
       }
     ]
   };
@@ -99,7 +113,7 @@ module.exports = function(args, done) {
   };
   var curr = args['<template>'];
   while (curr) {
-    var parent = templateDeps[curr];
+    var parent = templateDependencies[curr];
     // non-root depends on parent template, root on 'template' and 'destination'
     tasks[curr] = parent ?
       [parent, generateTemplate(curr, parent)] :

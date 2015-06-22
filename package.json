@@ -16,7 +16,8 @@
     "joi": "^6.0.8",
     "khaos": "^0.9.3",
     "lodash": "^3.9.3",
-    "rimraf": "^2.4.0"
+    "rimraf": "^2.4.0",
+    "shelljs": "^0.5.1"
   },
   "devDependencies": {
     "mocha": "^2.2.1",
