@@ -2,6 +2,7 @@
   "eqeqeq": true,
   "node": true,
   "browser": true,
+  "indent": 2,
   "newcap": true,
   "predef": [
     "describe",
