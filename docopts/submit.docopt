@@ -1,10 +1,13 @@
+Submit your project to mongodb-js.
+
 Usage:
    mj submit [--help] [<directory>] [options]
 
 Options:
   -h, --help            Print this help screen
 
-Prepares to add the repository at <directory> (default: .) to the mongodb-js organization:
+Prepares to add the repository at <directory> (default: .)
+to the mongodb-js organization:
 
   1) does x
   2) does y
