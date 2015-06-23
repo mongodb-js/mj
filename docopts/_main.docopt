@@ -11,8 +11,8 @@ Options:
 Available commands are:
    help       Provide help on any command
    install    Install development tools for mongodb-js
-   create     Create a new mongodb-js module from a template
+   create     Create a new mongodb-js project from a template
    check      Check if all requirements are met and tests pass
-   submit     Prepare submission of existing repository to mongodb-js
+   submit     Prepare submission of existing project to mongodb-js
 
 See 'mj help <command>' for more information on a specific command.

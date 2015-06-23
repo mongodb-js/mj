@@ -1,19 +1,22 @@
+Create a new project based on a mongodb-js template.
+
 Usage:
    mj create <template> [<directory>] [options]
    mj create -h | --help
 
 Options:
-  --force               Forces copy, overwrites existing files
+  -f, --force           Forces copy, overwrites existing files
   -h, --help            Print this help screen
   -v, --verbose         Print more verbose information
 
-Creates a new scaffold of the given <template> in specified <directory> (default is
-current directory). Possible choices <for template> are:
+Creates a new directory at the given location if non-existent
+(default is `.`), prompts for some initial information like name
+and description, and copies the template files into the directory.
 
-  empty   directory structure with the bare minimum to qualify as mongodb-js.
-  cli     command-line interface tool, like "mj".
-  view    ampersand view module, e.g. a subview for a larger app.
-  spa     single-page application, running exclusively in a browser.
-  full    full client/server app.
-  util    utility function, template or code snippet.
-  doc     non-code document, spec or documentation.
+Does not copy into non-empty directories, unless `--force` is
+used.
+
+Possible choices for <template> are:
+
+  empty    template with bare minimum to qualify as mongodb-js.
+  cli      command-line interface tool, like "mj".
