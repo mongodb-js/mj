@@ -59,7 +59,7 @@ var checkPackage = function(args, done) {
     name: Joi.string().min(1).max(30).regex(/^[a-zA-Z0-9][a-zA-Z0-9\.\-_]*$/).required(),
     version: Joi.string().regex(/^[0-9]+\.[0-9]+[0-9+a-zA-Z\.\-]+$/).required(),
     description: Joi.string().max(80).required(),
-    license: Joi.string().alphanum().max(10).required(),
+    license: Joi.string().max(20).required(),
     homepage: Joi.string().uri({
       scheme: ['http', 'https']
     }).required(),
@@ -72,7 +72,7 @@ var checkPackage = function(args, done) {
     }),
     bin: Joi.object().optional(),
     scripts: Joi.object().optional(),
-    bugs: Joi.object().required(),
+    bugs: Joi.alternatives().try(Joi.string(), Joi.object()).required(),
     author: Joi.string().required(),
     dependencies: Joi.object().required(),
     devDependencies: Joi.object().required()
