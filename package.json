@@ -11,20 +11,29 @@
     "async": "^0.9.0",
     "cli-color": "^0.3.2",
     "clui": "^0.3.1",
-    "debug": "^2.1.3",
+    "debug": "^2.2.0",
     "docopt": "^0.6.0",
+    "download": "^4.2.0",
+    "fs-extra": "^0.24.0",
     "glob": "^5.0.2",
     "joi": "^6.0.8",
     "khaos": "^0.9.3",
-    "lodash": "^3.9.3",
+    "lodash": "^3.10.1",
+    "minimist": "^1.2.0",
+    "mkdirp": "^0.5.1",
     "rimraf": "^2.4.0",
-    "shelljs": "^0.5.1"
+    "run-series": "^1.1.2",
+    "shelljs": "^0.5.1",
+    "untildify": "^2.1.0",
+    "which": "^1.1.2",
+    "winreg": "0.0.12"
   },
   "devDependencies": {
-    "which": "^1.0.9",
+    "eslint-config-mongodb-js": "^0.1.5",
     "jshint": "^2.6.3",
     "mocha": "^2.2.1",
-    "pre-commit": "^1.0.6"
+    "pre-commit": "^1.0.6",
+    "which": "^1.0.9"
   },
   "scripts": {
     "check": "jshint",
@@ -50,7 +59,7 @@
   "bugs": {
     "url": "https://github.com/mongodb-js/mj/issues"
   },
-    "precommit": [
+  "precommit": [
     "check"
   ]
 }
