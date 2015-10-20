@@ -1,3 +1,4 @@
+/* eslint no-sync:0 */
 var mj = require('../');
 var loadDocopt = require('../lib/load_docopt');
 var assert = require('assert');
@@ -36,13 +37,12 @@ var run = function(args, done) {
   exec(cmd, function(err, stdout, stderr) {
     if (err) {
       debug('failed to run `%s`', cmd);
-      console.error('exec failed: ', err);
+      debug('exec failed: ', err);
       return done(err);
     }
     debug('completed successfully `%s`', cmd);
     done(null, stdout, stderr);
   });
-
 };
 
 function containsLineWith(text, str) {
@@ -136,7 +136,7 @@ describe('mj create', function() {
 
   it('should reject non-existing templates', function(done) {
     run('create foo ./bar', function(err, stdout) {
-      // assert.ifError(err);
+      assert.ifError(err);
       assert.ok(containsLineWith(stdout,
         'create failed: Unknown template "foo".'
       ));
@@ -149,6 +149,7 @@ describe('mj create', function() {
     makeNonEmptyDir(testDir, function(err) {
       assert.ifError(err);
       run('create empty ' + testDir, function(err, stdout) {
+        assert.ifError(err);
         assert.ok(containsLineWith(stdout,
           format('create failed: destination directory %s is not empty.', path.resolve(testDir))
         ));
@@ -160,6 +161,7 @@ describe('mj create', function() {
   it('should create new project in existing, non-empty directory with --force', function(done) {
     // make directory
     makeNonEmptyDir(testDir, function(err) {
+      assert.ifError(err);
       // fixture for create command args
       var args = {
         '<directory>': testDir,
@@ -205,7 +207,3 @@ describe('mj create', function() {
     });
   });
 });
-
-
-
-

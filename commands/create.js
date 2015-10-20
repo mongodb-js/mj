@@ -1,6 +1,3 @@
-'use strict';
-
-var debug = require('debug')('mj:create');
 var format = require('util').format;
 var Khaos = require('khaos');
 var path = require('path');
@@ -22,39 +19,34 @@ var templateDependencies = {
 };
 
 module.exports = function(args, done) {
-
   var tasks = {
-    /**
-     * make sure the template exists.
-     */
-    'template': function(callback) {
+    // make sure the template exists.
+    template: function(callback) {
       if (Object.keys(templateDependencies).indexOf(args['<template>']) === -1) {
-        return callback(new Error(format('Unknown template "%s". Run ' +
-          '`mj help create` for list of valid templates.', args['<template>'])));
+        return callback(new Error(format('Unknown template "%s". Run '
+          + '`mj help create` for list of valid templates.', args['<template>'])));
       }
       return callback(null);
     },
-
-    /**
-     * before copying, make sure the target directory is empty or does not exist.
-     */
-    'destination': function(callback) {
+    // before copying, make sure the target directory is empty or does not exist.
+    destination: function(callback) {
       fs.readdir(args['<directory>'], function(err, files) {
         // error here means it does not exist, which is good.
-        if (err || args['--force']) return callback(null, args['<directory>']);
-        if ((files.length) > 0) return callback(new Error(format('destination ' +
-            'directory %s is not empty.', path.resolve(args['<directory>']))));
+        if (err || args['--force']) {
+          return callback(null, args['<directory>']);
+        }
+        if (files.length > 0) {
+          return callback(new Error(format('destination '
+            + 'directory %s is not empty.', path.resolve(args['<directory>']))));
+        }
         return callback(null, args['<directory>']);
       });
     },
-
-    /**
-     * after templates are copied, run git init, add, commit and npm install
-     */
-    'git': function(callback) {
+    // after templates are copied, run git init, add, commit and npm install
+    git: function(callback) {
       which('git', callback);
     },
-    'npm': function(callback) {
+    npm: function(callback) {
       which('npm', callback);
     },
     'git init': [
@@ -97,10 +89,16 @@ module.exports = function(args, done) {
     return function(callback, results) {
       var khaos = new Khaos(path.join(__dirname, '../templates/', template));
       khaos.read(function(err, files) {
+        if (err) return callback(err);
+
         khaos.parse(files, function(err, schema) {
+          if (err) return callback(err);
+
           // only prompt for new variables
           var newVars = _.omit(schema, _.keys(results[parent] || args.answers));
           khaos.prompt(newVars, function(err, answers) {
+            if (err) return callback(err);
+
             // merge new answers with existing ones and pass to next template
             answers = _.merge(answers, results[parent] || args.answers || {});
             khaos.write(results.destination, files, answers, function(err) {

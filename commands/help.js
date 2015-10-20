@@ -1,5 +1,3 @@
-'use strict';
-
 var fs = require('fs');
 var path = require('path');
 
@@ -11,11 +9,15 @@ module.exports = function(args, done) {
 
   fs.exists(src, function(exists) {
     if (!exists) {
-      return done(new Error('Unknown command `' + cmd + '`. See `mj help` for available commands.'));
+      return done(new Error('Unknown command `'
+        + cmd + '`. See `mj help` for available commands.'));
     }
     fs.readFile(src, 'utf-8', function(err, help) {
-      if (err) return done(err);
+      if (err) {
+        return done(err);
+      }
       // print help text
+      /* eslint no-console:0 */
       console.log(help);
       return done(null, help);
     });

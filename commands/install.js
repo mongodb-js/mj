@@ -3,7 +3,7 @@ var glob = require('glob');
 var fs = require('fs');
 var taskmgr = require('../lib/taskmgr');
 var symbols = require('../lib/symbols');
-var child_process = require('child_process');
+var exec = require('child_process').exec;
 var path = require('path');
 var _ = require('lodash');
 var debug = require('debug')('mj:install');
@@ -25,8 +25,10 @@ var sublime_plugins = [
  */
 function isModuleInstalledGlobally(name, fn) {
   var cmd = 'npm ls --global --production --json --depth=0';
-  child_process.exec(cmd, function(err, stdout) {
-    if (err) return fn(err);
+  exec(cmd, function(err, stdout) {
+    if (err) {
+      return fn(err);
+    }
 
     var data = JSON.parse(stdout);
     var installed = data.dependencies[name];
@@ -57,7 +59,9 @@ function findSublimeUsrLocation(suffix, done) {
   }
 
   glob(pattern, function(err, matches) {
-    if (err) return done(err);
+    if (err) {
+      return done(err);
+    }
     if (matches.length === 0) {
       return done(new Error('can\'t find `' + suffix + '`'));
     }
@@ -69,10 +73,14 @@ function findSublimeUsrLocation(suffix, done) {
 
 function hideSublimeDotFiles(done) {
   findSublimeUsrLocation('Preferences.sublime-settings', function(err, config) {
-    if (err) return done(err);
+    if (err) {
+      return done(err);
+    }
 
     fs.readFile(config, 'utf8', function(err, content) {
-      if (err) return done(err);
+      if (err) {
+        return done(err);
+      }
 
       var newContent = JSON.parse(content);
       var modified = false;
@@ -106,12 +114,15 @@ function hideSublimeDotFiles(done) {
 }
 
 function registerSublimePlugins(done) {
-
   findSublimeUsrLocation('Package Control.sublime-settings', function(err, config) {
-    if (err) return done(err);
+    if (err) {
+      return done(err);
+    }
 
     fs.readFile(config, 'utf8', function(err, content) {
-      if (err) return done(err);
+      if (err) {
+        return done(err);
+      }
 
       // add packages if not yet installed
       var installedPlugins = [];
@@ -146,9 +157,11 @@ function registerSublimePlugins(done) {
 
 function installJSHintModule(done) {
   isModuleInstalledGlobally('jshint', function(err, installed) {
-    if (err) return done(err);
+    if (err) {
+      return done(err);
+    }
     if (!installed) {
-      child_process.exec('npm install -g jshint', done);
+      exec('npm install -g jshint', done);
     }
     done(null, !installed);
   });

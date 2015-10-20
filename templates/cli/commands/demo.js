@@ -1,9 +1,6 @@
-'use strict';
-
 var taskmgr = require('../lib/taskmgr');
 
 module.exports = function(args, done) {
-
   /* demos how tasks dependent on each other can easily
    * be implemented using async.auto()'s dependency model.
    * information from each task can be passed to its dependents
@@ -42,8 +39,8 @@ module.exports = function(args, done) {
         setTimeout(function() {
           // results.write_file contains the filename returned by write_file.
           callback(null, {
-            'file': results['write the file'],
-            'email': 'user@example.com'
+            file: results['write the file'],
+            email: 'user@example.com'
           });
         }, 1000);
       }

@@ -1,16 +1,13 @@
-var config = require('./config');
-
-var path = require('path');
+/* eslint camelcase:0 */
 var mkdirp = require('mkdirp');
 var Download = require('download');
-var fs = require('fs-extra');
 var series = require('run-series');
 var partial = require('lodash').partial;
-
+var config = require('./config');
 var env = require('./env');
 var run = require('./run');
 var npm = require('./npm');
-var debug = require('debug')('mongodb-scout-bootstrap');
+var debug = require('debug')('mj:install:windows');
 
 function env_variables(fn) {
   debug('setting up environment variables for nodist...');
@@ -18,17 +15,15 @@ function env_variables(fn) {
     partial(env.set, 'NODIST_X64', '0'),
     partial(env.set, 'NODIST_PREFIX', config.NODIST_PREFIX)
   ], function(err) {
-    if (err) return fn(err);
+    if (err) {
+      return fn(err);
+    }
     fn();
   });
 }
 
 function nodist_use(version, fn) {
   run('nodist', [version], fn);
-}
-
-function nodist_selfupdate(fn) {
-  run('nodist', ['selfupdate'], fn);
 }
 
 function nodist_download(fn) {

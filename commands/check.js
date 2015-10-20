@@ -1,5 +1,3 @@
-'use strict';
-
 var fs = require('fs');
 var async = require('async');
 var glob = require('glob');
@@ -19,14 +17,16 @@ var checkRequiredFilesExist = function(args, done) {
     'README*',
     'LICENSE',
     '.travis.yml',
-    '.gitignore',
+    '.gitignore'
   ].map(function requireFileExists(pattern) {
     return function(cb) {
       glob(pattern, {
         cwd: dir
       }, function(err, files) {
         debug('resolved %s for `%s`', files, pattern);
-        if (err) return cb(err);
+        if (err) {
+          return cb(err);
+        }
         if (files.length === 0) {
           return done(new Error('missing required file matching ' + pattern));
         }
@@ -35,7 +35,9 @@ var checkRequiredFilesExist = function(args, done) {
         }
 
         fs.exists(files[0], function(exists) {
-          if (!exists) return done(new Error('missing required file matching ' + files[0]));
+          if (!exists) {
+            return done(new Error('missing required file matching ' + files[0]));
+          }
           return cb(null, files[0]);
         });
       });
@@ -46,15 +48,8 @@ var checkRequiredFilesExist = function(args, done) {
 
 // Check package.json conforms
 var checkPackage = function(args, done) {
-  var dir = path.resolve(args['<directory>']),
-    pkg;
-
-  try {
-    pkg = require(path.join(dir, 'package.json'));
-  } catch (e) {
-    return process.nextTick(done.bind(null, e));
-  }
-
+  var dir = path.resolve(args['<directory>']);
+  var pkg = require(path.join(dir, 'package.json'));
   var schema = Joi.object().keys({
     name: Joi.string().min(1).max(30).regex(/^[a-zA-Z0-9][a-zA-Z0-9\.\-_]*$/).required(),
     version: Joi.string().regex(/^[0-9]+\.[0-9]+[0-9+a-zA-Z\.\-]+$/).required(),
@@ -90,25 +85,26 @@ var checkFirstRun = function(args, done) {
   function run(cmd) {
     return function(cb) {
       debug('testing `%s`', cmd);
-      var parts = cmd.split(' '),
-        bin = parts.shift(),
-        args = parts,
-        completed = false;
+      var parts = cmd.split(' ');
+      var bin = parts.shift();
+      var args = parts;
+      var completed = false;
 
       var child = spawn(bin, args, {
         cwd: args['<directory>']
       })
         .on('error', function(err) {
           completed = true;
-          console.error(err);
-          done(new Error(cmd + ' failed'));
+          done(new Error(cmd + ' failed: ' + err.message));
         });
 
       child.stderr.pipe(process.stderr);
 
       if (cmd === 'npm start') {
         setTimeout(function() {
-          if (completed) return;
+          if (completed) {
+            return;
+          }
 
           completed = true;
           child.kill('SIGKILL');
@@ -117,11 +113,16 @@ var checkFirstRun = function(args, done) {
       }
 
       child.on('close', function(code) {
-        if (completed) return;
+        if (completed) {
+          return;
+        }
 
         completed = true;
 
-        if (code === 0) return done();
+        if (code === 0) {
+          done();
+          return;
+        }
 
         cb(new Error(cmd + ' failed'));
       });
@@ -129,20 +130,17 @@ var checkFirstRun = function(args, done) {
   }
   debug('checking first run');
 
-  var pkg,
-    dir = path.resolve(args['<directory>']);
 
-  try {
-    pkg = require(path.join(dir, 'package.json'));
-  } catch (e) {
-    debug('fooo');
-    return process.nextTick(done.bind(null, e));
-  }
+  var dir = path.resolve(args['<directory>']);
+
+  var pkg = require(path.join(dir, 'package.json'));
 
   debug('clearing local node_modules to make sure install works');
 
   rimraf(dir + '/node_modules/**/*', function(err) {
-    if (err) return done(err);
+    if (err) {
+      return done(err);
+    }
     var tasks = [
       run('npm install'),
       run('npm test')
@@ -153,10 +151,11 @@ var checkFirstRun = function(args, done) {
     }
 
     async.series(tasks, function(err, results) {
-      if (err) return done(err);
+      if (err) {
+        return done(err);
+      }
       done(null, results);
     });
-
   });
 };
 
