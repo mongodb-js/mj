@@ -1,14 +1,12 @@
-'use strict';
-
-var os = require('os'),
-  glob = require('glob'),
-  fs = require('fs'),
-  taskmgr = require('../lib/taskmgr'),
-  symbols = require('../lib/symbols'),
-  child_process = require('child_process'),
-  path = require('path'),
-  _ = require('lodash'),
-  debug = require('debug')('mj:install');
+var os = require('os');
+var glob = require('glob');
+var fs = require('fs');
+var taskmgr = require('../lib/taskmgr');
+var symbols = require('../lib/symbols');
+var child_process = require('child_process');
+var path = require('path');
+var _ = require('lodash');
+var debug = require('debug')('mj:install');
 
 var sublime_plugins = [
   'Jade',
@@ -32,20 +30,23 @@ function isModuleInstalledGlobally(name, fn) {
 
     var data = JSON.parse(stdout);
     var installed = data.dependencies[name];
-    fn(null, (installed !== undefined));
+    fn(null, installed !== undefined);
   });
 }
 
 function findSublimeUsrLocation(suffix, done) {
   var patterns = {
-    'darwin': function() {
-      return path.join(process.env.HOME, '/Library/Application Support/Sublime Text ?/Packages/User/');
+    darwin: function() {
+      return path.join(process.env.HOME,
+        '/Library/Application Support/Sublime Text ?/Packages/User/');
     },
-    'linux': function() {
-      return path.join(process.env.HOME, '/.config/sublime-text-?/Packages/User/');
+    linux: function() {
+      return path.join(process.env.HOME,
+        '/.config/sublime-text-?/Packages/User/');
     },
-    'win32': function() {
-      return path.join(process.env.APPDATA, '\\AppData\\Roaming\\Sublime Text ?\\Packages\\User\\');
+    win32: function() {
+      return path.join(process.env.APPDATA,
+        '\\AppData\\Roaming\\Sublime Text ?\\Packages\\User\\');
     }
   };
 
@@ -67,7 +68,6 @@ function findSublimeUsrLocation(suffix, done) {
 }
 
 function hideSublimeDotFiles(done) {
-
   findSublimeUsrLocation('Preferences.sublime-settings', function(err, config) {
     if (err) return done(err);
 
@@ -80,11 +80,9 @@ function hideSublimeDotFiles(done) {
       if (!_.has(newContent, 'file_exclude_patterns')) {
         newContent.file_exclude_patterns = ['.*'];
         modified = true;
-      } else {
-        if (newContent.file_exclude_patterns.indexOf('.*') === -1) {
-          newContent.file_exclude_patterns.push('.*');
-          modified = true;
-        }
+      } else if (newContent.file_exclude_patterns.indexOf('.*') === -1) {
+        newContent.file_exclude_patterns.push('.*');
+        modified = true;
       }
 
       if (modified) {
@@ -93,6 +91,7 @@ function hideSublimeDotFiles(done) {
           if (!exists) {
             // create backup copy only if doesn't exist yet
             debug('writing backup file', backup_file);
+            /*eslint no-sync:0*/
             fs.writeFileSync(backup_file, content);
           }
         });
@@ -156,7 +155,6 @@ function installJSHintModule(done) {
 }
 
 module.exports = function(args, done) {
-
   var tasks = {
     'install jshint module': installJSHintModule
   };
@@ -173,7 +171,8 @@ module.exports = function(args, done) {
 
   taskmgr(tasks, options, function(err, res) {
     if (err && err.message === 'can\'t find `Package Control.sublime-settings`') {
-      console.log(' ', symbols.warn, ' make sure Package Control (https://packagecontrol.io/) is installed.');
+      console.log(' ', symbols.warn,
+        ' make sure Package Control (https://packagecontrol.io/) is installed.');
     }
     if (res['register sublime plugins'] && res['register sublime plugins'].length > 0) {
       console.log(' ', symbols.warn, ' restart Sublime Text to install the new plugins');
