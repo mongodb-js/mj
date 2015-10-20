@@ -79,7 +79,7 @@ describe('mj module', function() {
   });
 });
 
-describe('mj help', function() {
+describe.skip('mj help', function() {
   describe('--help', function() {
     it('should contain help for usage, options, commands, pointer to `mj help`', function(done) {
       run('--help', function(err, stdout) {
@@ -96,7 +96,7 @@ describe('mj help', function() {
     });
   });
 
-  describe('help', function() {
+  describe.skip('help', function() {
     it('should return the main help text if no arguments given', function(done) {
       run('help', function(err, stdout) {
         assert.ifError(err);
@@ -125,7 +125,7 @@ describe('mj help', function() {
   });
 });
 
-describe('mj create', function() {
+describe.skip('mj create', function() {
   this.timeout(15000);
 
   var testDir = path.join(TEST_DIR, 'test_module/');
