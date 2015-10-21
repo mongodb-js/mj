@@ -1,8 +1,6 @@
-# mj
+# mj [![][travis_img]][travis_url] [![][npm_img]][npm_url]
 
-[![Build Status](https://travis-ci.org/mongodb-js/mj.svg?branch=master)](https://travis-ci.org/mongodb-js/mj)
-
-mongodb-js tooling.
+> mongodb-js tooling.
 
 ## Usage
 
@@ -71,14 +69,18 @@ Your command should call `done()` if everything was ok, or `done(err)` if there 
 
 ### Task Manager
 
-This module comes with a task manager, that uses [async.auto](https://github.com/caolan/async#autotasks-callback) to handle a number of interdependent asynchronous tasks. 
+This module comes with a task manager, that uses [async.auto](https://github.com/caolan/async#autotasks-callback) to handle a number of interdependent asynchronous tasks.
 
-Each task defines zero or more dependencies, that need to be fulfilled first (make sure not to define circular dependencies). Each task also can return any number of results, which are available in the `results` object in dependent tasks. 
+Each task defines zero or more dependencies, that need to be fulfilled first (make sure not to define circular dependencies). Each task also can return any number of results, which are available in the `results` object in dependent tasks.
 
-The "demo" command shows how this feature can be used. 
+The "demo" command shows how this feature can be used.
 
 
 ## License
 
 Apache 2.0
 
+[travis_img]: https://img.shields.io/travis/mongodb-js/mj.svg?style=flat-square
+[travis_url]: https://travis-ci.org/mongodb-js/mj
+[npm_img]: https://img.shields.io/npm/v/mj.svg?style=flat-square
+[npm_url]: https://www.npmjs.org/package/mj
