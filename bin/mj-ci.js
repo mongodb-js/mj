@@ -82,6 +82,7 @@ argv.spinner = function(msg) {
       argv._spinner.stop();
     }
     argv._spinner = new clui.Spinner(format('%s%s', msg, figures.ellipsis));
+    argv._spinner.start();
   }
   return argv;
 };
@@ -99,15 +100,26 @@ argv.ok = function(msg) {
   console.log(chalk.green(figures.tick), ' ' + msg);
   return argv;
 };
+argv.warn = function(msg) {
+  /* eslint no-console:0 */
+  argv.stopSpinner();
+  console.log(chalk.yellow(figures.warning), ' ' + msg);
+  return argv;
+};
 
 argv.error = function(title, err) {
   /* eslint no-console:0 */
   argv.stopSpinner();
 
-  console.error(chalk.red(figures.cross), format(' Error %s', title));
-  err.stack.split('\n').map(function(line) {
-    console.error(chalk.gray(line));
-  });
+  if (err) {
+    console.error(chalk.red(figures.cross), format(' Error %s', title));
+    err.stack.split('\n').map(function(line) {
+      console.error(chalk.gray(line));
+    });
+  }
+  else {
+    console.error(chalk.red(figures.cross), title);
+  }
   return argv;
 };
 
@@ -119,12 +131,11 @@ var name = command || 'ci';
 command = command || 'default';
 
 argv.spinner('Running ' + name);
-ci[command](argv, function(err, res) {
+ci[command](argv, function(err) {
   if (err) {
     argv.error('ci', err);
     process.exit(1);
   }
-  argv.ok(name + ' complete')
-  console.log('res', res);
+  argv.ok(name + ': complete')
   process.exit(0);
 });
