@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 var chalk = require('chalk');
 var figures = require('figures');
 var format = require('util').format;
