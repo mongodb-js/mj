@@ -1,7 +1,80 @@
 {
-  "end": 1445386522.482,
-  "start": 1445386522482,
-  "elapsed": -1443941135959.518,
+  "end": 1445483060.023,
+  "start": 1445483060016,
+  "elapsed": -1444037576955.977,
   "failures": 0,
-  "results": []
+  "results": [
+    {
+      "test_file": "/Users/lucas/mj/test/index.test.js: mj module should import correctly",
+      "start": 1445483060.019,
+      "end": 1445483060.02,
+      "exit_code": 0,
+      "elapsed": 0,
+      "error": {},
+      "status": "pass"
+    },
+    {
+      "test_file": "/Users/lucas/mj/test/index.test.js: mj help --help should contain help for usage, options, commands, pointer to `mj help`",
+      "start": 1445483060.022,
+      "end": 1445483060.022,
+      "exit_code": 0,
+      "elapsed": 0,
+      "error": {},
+      "status": "skip"
+    },
+    {
+      "test_file": "/Users/lucas/mj/test/index.test.js: mj help help should return the main help text if no arguments given",
+      "start": 1445483060.022,
+      "end": 1445483060.022,
+      "exit_code": 0,
+      "elapsed": 0,
+      "error": {},
+      "status": "skip"
+    },
+    {
+      "test_file": "/Users/lucas/mj/test/index.test.js: mj help help should output the correct help text when given a command",
+      "start": 1445483060.022,
+      "end": 1445483060.022,
+      "exit_code": 0,
+      "elapsed": 0,
+      "error": {},
+      "status": "skip"
+    },
+    {
+      "test_file": "/Users/lucas/mj/test/index.test.js: mj create should reject non-existing templates",
+      "start": 1445483060.022,
+      "end": 1445483060.022,
+      "exit_code": 0,
+      "elapsed": 0,
+      "error": {},
+      "status": "skip"
+    },
+    {
+      "test_file": "/Users/lucas/mj/test/index.test.js: mj create should not create new project in existing, non-empty directory",
+      "start": 1445483060.022,
+      "end": 1445483060.022,
+      "exit_code": 0,
+      "elapsed": 0,
+      "error": {},
+      "status": "skip"
+    },
+    {
+      "test_file": "/Users/lucas/mj/test/index.test.js: mj create should create new project in existing, non-empty directory with --force",
+      "start": 1445483060.022,
+      "end": 1445483060.022,
+      "exit_code": 0,
+      "elapsed": 0,
+      "error": {},
+      "status": "skip"
+    },
+    {
+      "test_file": "/Users/lucas/mj/test/index.test.js: mj create should copy the template files",
+      "start": 1445483060.023,
+      "end": 1445483060.023,
+      "exit_code": 0,
+      "elapsed": 0,
+      "error": {},
+      "status": "skip"
+    }
+  ]
 }

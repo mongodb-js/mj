@@ -4,7 +4,7 @@ var figures = require('figures');
 var format = require('util').format;
 var clui = require('clui');
 var multiline = require('multiline');
-
+var _ = require('lodash');
 /**
  * How to use `yargs` like a Wizzard:
  * - https://github.com/bcoe/yargs
@@ -16,11 +16,12 @@ var multiline = require('multiline');
  * @todo (imlucas): Use `.completion()`
  * https://www.npmjs.com/package/yargs#completion-cmd-description-fn
  */
-var argv = require('yargs')
+var yargs = require('yargs')
   .wrap(120)
   .usage('mj-ci [<command>] [<directory>]')
   .command('before', 'Start MongoDB')
   .command('run', 'Run tests')
+  .command('_run', 'Child process used by `run` to execute tests')
   .command('after', 'Stop MongoDB')
   .command('', 'before & run & after')
   .option('directory', {
@@ -58,14 +59,14 @@ var argv = require('yargs')
   })
   .example('$0', 'Run the tests.')
   .help('help').alias('h', 'help')
-  .epilogue(multiline(function() {/*
+  .epilogue(multiline(function() { /*
     Environment Variables:
       mongodb.version         MONGODB_VERSION
       mongodb.topology        MONGODB_TOPOLOGY
       mongodb.enterprise      MONGODB_ENTERPRISE
   */
-  }))
-  .argv;
+  }));
+var argv = yargs.argv;
 
 if (argv.verbose) {
   process.env.DEBUG = '*';
@@ -116,11 +117,36 @@ argv.error = function(title, err) {
     err.stack.split('\n').map(function(line) {
       console.error(chalk.gray(line));
     });
-  }
-  else {
+  } else {
     console.error(chalk.red(figures.cross), title);
   }
   return argv;
+};
+
+argv.toString = function() {
+  return argv.toArray().join(' ');
+};
+
+argv.toArray = function() {
+  var res = [];
+  var args = _.clone(argv);
+  var aliasKeys = _.flatten(_.values(yargs.getOptions().alias || {}));
+  res.push.apply(res, args._);
+  delete args._;
+  _.each(args, function(value, key) {
+    if (!_.isString(value)) {
+      return;
+    }
+    if (_.startsWith(key, '$')) {
+      return;
+    }
+    if (_.contains(aliasKeys, key)) {
+      return;
+    }
+
+    res.push.apply(res, [format('--%s', key), value]);
+  });
+  return res;
 };
 
 // var debug = require('debug')('mj:bin:ci');
@@ -130,12 +156,18 @@ var command = argv._[0];
 var name = command || 'ci';
 command = command || 'default';
 
+if (!ci[command]) {
+  argv.warn(format('ci does not seem to have the command `%s`', command));
+  yargs.showHelp();
+  process.exit(1);
+}
+
 argv.spinner('Running ' + name);
 ci[command](argv, function(err) {
   if (err) {
     argv.error('ci', err);
     process.exit(1);
   }
-  argv.ok(name + ': complete')
+  argv.ok(name + ': complete');
   process.exit(0);
 });
