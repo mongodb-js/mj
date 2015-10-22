@@ -171,7 +171,7 @@ var checker = setInterval(function() {
   running(function() {
     debug('is mongodb running?', arguments);
   });
-}, 5000);
+}, 1000);
 
 var command = argv._[0];
 var name = command || 'ci';
@@ -185,6 +185,7 @@ if (!ci[command]) {
 
 argv.spinner('Running ' + name);
 ci[command](argv, function(err) {
+  debug('command returned', arguments);
   clearInterval(checker);
   debug('calling kill-mongodb');
   kill(function() {
