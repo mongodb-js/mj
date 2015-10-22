@@ -167,8 +167,8 @@ var ci = require('../lib/command/ci');
 
 var running = require('is-mongodb-running');
 var kill = require('kill-mongodb');
-var checker = setInterval(function(){
-  running(function(){
+var checker = setInterval(function() {
+  running(function() {
     debug('is mongodb running?', arguments);
   });
 }, 5000);
@@ -187,7 +187,7 @@ argv.spinner('Running ' + name);
 ci[command](argv, function(err) {
   clearInterval(checker);
   debug('calling kill-mongodb');
-  kill(function(){
+  kill(function() {
     debug('kill-mongodb returned', arguments);
     if (err) {
       argv.error('ci', err);

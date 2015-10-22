@@ -72,5 +72,11 @@
   },
   "precommit": [
     "check"
-  ]
+  ],
+  "dependency-check": {
+    "entries": [
+      "bin/mj.js",
+      "bin/mj-ci.js"
+    ]
+  }
 }
