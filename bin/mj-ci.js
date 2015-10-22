@@ -81,6 +81,7 @@ var argv = yargs.argv;
 if (argv.verbose) {
   process.env.DEBUG = '*';
 }
+var debug = require('debug')('mj-ci');
 
 debug('argv is', JSON.stringify(argv, null, 2));
 
