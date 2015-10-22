@@ -165,6 +165,14 @@ argv.toArray = function() {
 // var debug = require('debug')('mj:bin:ci');
 var ci = require('../lib/command/ci');
 
+var running = require('is-mongodb-running');
+var kill = require('kill-mongodb');
+var checker = setInterval(function(){
+  running(function(){
+    debug('is mongodb running?', arguments);
+  });
+}, 5000);
+
 var command = argv._[0];
 var name = command || 'ci';
 command = command || 'default';
@@ -177,10 +185,15 @@ if (!ci[command]) {
 
 argv.spinner('Running ' + name);
 ci[command](argv, function(err) {
-  if (err) {
-    argv.error('ci', err);
-    process.exit(1);
-  }
-  argv.ok(name + ': complete');
-  process.exit(0);
+  clearInterval(checker);
+  debug('calling kill-mongodb');
+  kill(function(){
+    debug('kill-mongodb returned', arguments);
+    if (err) {
+      argv.error('ci', err);
+      process.exit(1);
+    }
+    argv.ok(name + ': complete');
+    process.exit(0);
+  });
 });
