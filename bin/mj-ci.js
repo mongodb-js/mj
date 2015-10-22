@@ -82,6 +82,8 @@ if (argv.verbose) {
   process.env.DEBUG = '*';
 }
 
+debug('argv is', JSON.stringify(argv, null, 2));
+
 argv._spinner = null;
 argv.spinner = function(msg) {
   if (process.env.CI) {
