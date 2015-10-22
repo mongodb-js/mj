@@ -1,11 +1,20 @@
 #!/usr/bin/env node
 
+var updateNotifier = require('update-notifier');
+var pkg = require('../package.json');
+updateNotifier({
+  pkg: pkg
+}).notify();
+
 var chalk = require('chalk');
 var figures = require('figures');
 var format = require('util').format;
 var clui = require('clui');
 var multiline = require('multiline');
 var _ = require('lodash');
+/**
+ * @todo (imlucas): Use https://www.npmjs.com/package/speller
+ */
 /**
  * How to use `yargs` like a Wizzard:
  * - https://github.com/bcoe/yargs

@@ -2,8 +2,7 @@
   "name": "mj",
   "version": "0.2.0",
   "description": "mongodb-js tooling",
-  "author": "Thomas Rueckstiess <thomas@mongodb.com>",
-  "main": "index.js",
+  "author": "mongodb-js <js@mongodb.com>",
   "bin": {
     "mj": "bin/mj.js",
     "mj-ci": "bin/mj-ci.js"
@@ -16,6 +15,7 @@
     "debug": "^2.2.0",
     "docopt": "^0.6.2",
     "download": "^4.3.1",
+    "eslint-config-mongodb-js": "^1.0.3",
     "figures": "^1.4.0",
     "fs-extra": "^0.24.0",
     "glob": "^5.0.15",
@@ -29,6 +29,7 @@
     "mongodb-js-precommit": "^0.2.2",
     "mongodb-runner": "^3.1.7",
     "multiline": "^1.0.2",
+    "nsp": "^1.1.0",
     "rimraf": "^2.4.3",
     "run-series": "^1.1.4",
     "shelljs": "^0.5.3",
@@ -39,7 +40,6 @@
     "yargs": "^3.27.0"
   },
   "devDependencies": {
-    "eslint-config-mongodb-js": "^1.0.3",
     "pre-commit": "^1.1.1"
   },
   "scripts": {
