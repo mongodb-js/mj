@@ -30,8 +30,8 @@ var yargs = require('yargs')
   .wrap(120)
   .usage('mj-ci [<command>] [<directory>]')
   .command('before', 'Start MongoDB')
-  .command('run', 'Run tests')
-  .command('_run', 'Child process used by `run` to execute tests')
+  .command('test', 'Run tests')
+  .command('test_', 'Child process used by `test` to execute tests')
   .command('after', 'Stop MongoDB')
   .command('', 'before & run & after')
   .option('directory', {
@@ -165,13 +165,14 @@ argv.toArray = function() {
 // var debug = require('debug')('mj:bin:ci');
 var ci = require('../lib/command/ci');
 
-var running = require('is-mongodb-running');
+
 var kill = require('kill-mongodb');
-var checker = setInterval(function() {
-  running(function() {
-    debug('is mongodb running?', arguments);
-  });
-}, 1000);
+// var running = require('is-mongodb-running');
+// var checker = setInterval(function() {
+//   running(function() {
+//     debug('is mongodb running?', arguments);
+//   });
+// }, 1000);
 
 var command = argv._[0];
 var name = command || 'ci';
@@ -186,7 +187,7 @@ if (!ci[command]) {
 argv.spinner('Running ' + name);
 ci[command](argv, function(err) {
   debug('command returned', arguments);
-  clearInterval(checker);
+  // clearInterval(checker);
   debug('calling kill-mongodb');
   kill(function() {
     debug('kill-mongodb returned', arguments);
