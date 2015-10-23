@@ -1,3 +1,4 @@
+/* eslint camelcase:0 */
 var os = require('os');
 var glob = require('glob');
 var fs = require('fs');
@@ -99,7 +100,7 @@ function hideSublimeDotFiles(done) {
           if (!exists) {
             // create backup copy only if doesn't exist yet
             debug('writing backup file', backup_file);
-            /*eslint no-sync:0*/
+            /* eslint no-sync:0 */
             fs.writeFileSync(backup_file, content);
           }
         });

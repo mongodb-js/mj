@@ -49,7 +49,7 @@
     "fmt": "mongodb-js-fmt bin/*.js lib/{*.js,**/*.js}",
     "check": "./node_modules/.bin/mongodb-js-precommit bin/*.js lib/*.js",
     "test": "mocha",
-    "ci": "bin/mj-ci.js"
+    "ci": "bin/mj-ci.js --verbose"
   },
   "homepage": "https://github.com/mongodb-js/mj",
   "repository": {
@@ -77,6 +77,21 @@
     "entries": [
       "bin/mj.js",
       "bin/mj-ci.js"
+    ],
+    "ignore": [
+      "cli-color",
+      "download",
+      "fs-extra",
+      "is-mongodb-running",
+      "joi",
+      "khaos",
+      "mkdirp",
+      "mongodb-js-fmt",
+      "nsp",
+      "rimraf",
+      "run-series",
+      "shelljs",
+      "winreg"
     ]
   }
 }
