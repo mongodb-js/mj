@@ -8,6 +8,7 @@
     "mj-ci": "bin/mj-ci.js"
   },
   "dependencies": {
+    "ampersand-model": "^6.0.2",
     "async": "^1.4.2",
     "chalk": "^1.1.1",
     "cli-color": "^1.1.0",
@@ -46,7 +47,7 @@
     "pre-commit": "^1.1.1"
   },
   "scripts": {
-    "fmt": "mongodb-js-fmt bin/*.js lib/{*.js,**/*.js}",
+    "fmt": "mongodb-js-fmt bin/*.js lib/{*.js,**/*.js} test/{*.js,**/*.js}",
     "check": "./node_modules/.bin/mongodb-js-precommit bin/*.js lib/*.js",
     "test": "mocha",
     "ci": "bin/mj-ci.js --verbose"
