@@ -50,7 +50,7 @@
     "fmt": "mongodb-js-fmt bin/*.js lib/{*.js,**/*.js} test/{*.js,**/*.js}",
     "check": "./node_modules/.bin/mongodb-js-precommit bin/*.js lib/*.js",
     "test": "mocha",
-    "ci": "bin/mj-ci.js --verbose"
+    "ci": "bin/mj-ci.js"
   },
   "homepage": "https://github.com/mongodb-js/mj",
   "repository": {
@@ -76,7 +76,6 @@
   ],
   "dependency-check": {
     "entries": [
-      "bin/mj.js",
       "bin/mj-ci.js"
     ],
     "ignore": [
