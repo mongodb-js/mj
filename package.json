@@ -1,6 +1,6 @@
 {
   "name": "mj",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "mongodb-js tooling",
   "author": "mongodb-js <js@mongodb.com>",
   "bin": {
