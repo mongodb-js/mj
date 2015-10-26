@@ -11,13 +11,12 @@ branches:
 version: "{build}"
 
 # what combinations to test
-environment:
-  matrix:
-    - nodejs_version: 0.10
+# environment:
+#   matrix:
+#     - nodejs_version: 0.10
 
 # Get the stable version of node
 install:
-  - ps: Install-Product node $env:nodejs_version
   - npm install
 
 build: off
