@@ -192,7 +192,7 @@ ci[command](argv, function(err) {
   kill(function() {
     debug('kill-mongodb returned', arguments);
     if (err) {
-      argv.error('ci', err);
+      argv.error('ci: ' + err.message, err);
       process.exit(1);
     }
     argv.ok(name + ': complete');
