@@ -9,16 +9,16 @@
   },
   "dependencies": {
     "ampersand-model": "^6.0.2",
-    "async": "^1.4.2",
+    "async": "^1.5.0",
     "chalk": "^1.1.1",
     "cli-color": "^1.1.0",
     "clui": "^0.3.1",
     "debug": "^2.2.0",
     "docopt": "^0.6.2",
-    "download": "^4.3.1",
-    "eslint-config-mongodb-js": "^1.0.3",
+    "download": "^4.4.1",
+    "eslint-config-mongodb-js": "^1.0.4",
     "figures": "^1.4.0",
-    "fs-extra": "^0.24.0",
+    "fs-extra": "^0.26.0",
     "glob": "^5.0.15",
     "is-mongodb-running": "^0.0.1",
     "joi": "^6.9.1",
@@ -31,7 +31,7 @@
     "mongodb-js-fmt": "^0.0.3",
     "mongodb-js-precommit": "^0.2.2",
     "mongodb-runner": "^3.1.11",
-    "mongodb-version-manager": "^0.8.9",
+    "mongodb-version-manager": "^0.8.10",
     "multiline": "^1.0.2",
     "nsp": "^1.1.0",
     "rimraf": "^2.4.3",
@@ -39,12 +39,12 @@
     "shelljs": "^0.5.3",
     "untildify": "^2.1.0",
     "update-notifier": "^0.5.0",
-    "which": "^1.1.2",
+    "which": "^1.2.0",
     "winreg": "0.0.12",
-    "yargs": "^3.27.0"
+    "yargs": "^3.29.0"
   },
   "devDependencies": {
-    "pre-commit": "^1.1.1"
+    "pre-commit": "^1.1.2"
   },
   "scripts": {
     "fmt": "mongodb-js-fmt bin/*.js lib/{*.js,**/*.js} test/{*.js,**/*.js}",
