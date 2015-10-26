@@ -108,16 +108,34 @@ argv.stopSpinner = function() {
   return argv;
 };
 
-argv.ok = function(msg) {
+function message(icon, command, msg) {
   /* eslint no-console:0 */
   argv.stopSpinner();
-  console.log(chalk.green(figures.tick), ' ' + msg);
+
+  var color = 'white';
+  if (icon === figures.tick) {
+    color = 'green';
+  } else if (icon === figures.warning) {
+    color = 'yellow';
+  } else if (icon === figures.cross) {
+    color = 'red';
+  }
+
+  if (!msg) {
+    console.log(chalk.bold[color](icon), ' ' + command);
+  } else {
+    command = command.replace(/ /g, ' ' + figures.pointerSmall + ' ');
+    console.log(chalk.bold[color](icon) + ' ', chalk.gray(command), msg);
+  }
+}
+
+argv.ok = function(command, msg) {
+  message(figures.tick, command, msg);
   return argv;
 };
-argv.warn = function(msg) {
-  /* eslint no-console:0 */
-  argv.stopSpinner();
-  console.log(chalk.yellow(figures.warning), ' ' + msg);
+
+argv.warn = function(command, msg) {
+  message(figures.warning, command, msg);
   return argv;
 };
 
@@ -184,7 +202,7 @@ if (!ci[command]) {
   process.exit(1);
 }
 
-argv.spinner('Running ' + name);
+// argv.spinner('Running ' + name);
 ci[command](argv, function(err) {
   debug('command returned', arguments);
   // clearInterval(checker);
