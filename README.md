@@ -1,4 +1,4 @@
-# mj [![][travis_img]][travis_url] [![][npm_img]][npm_url]
+# mj [![][travis_img]][travis_url] [![][appveyor_img]][appveyor_url] [![][npm_img]][npm_url]
 
 > mongodb-js tooling.
 
@@ -84,3 +84,5 @@ Apache 2.0
 [travis_url]: https://travis-ci.org/mongodb-js/mj
 [npm_img]: https://img.shields.io/npm/v/mj.svg?style=flat-square
 [npm_url]: https://www.npmjs.org/package/mj
+[appveyor_img]: https://img.shields.io/appveyor/ci/mongodb-js/mj.svg?style=flat-square
+[appveyor_url]: https://ci.appveyor.com/project/imlucas/mj
