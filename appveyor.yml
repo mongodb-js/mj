@@ -17,13 +17,14 @@ version: "{build}"
 
 # Get the stable version of node
 install:
+  - npm install -g npm@3
   - npm install
 
 build: off
 
 test_script:
   # Output useful info for debugging.
-  - node --version && npm --version
+  - npm version --json
   - ps: "npm test # PowerShell" # Pass comment to PS for easier debugging
   - cmd: npm test
 
