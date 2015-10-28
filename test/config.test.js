@@ -7,9 +7,9 @@ describe('config', function() {
     assert(config);
     assert(config.Config);
 
-    assert.equal(config.nodejs_distro, 'io.js');
-    assert.equal(config.nodejs_version, '2.3.4');
-    assert.equal(config.npm_version, '3.3.8');
+    assert.equal(config.nodejs_distro, 'node');
+    assert.equal(config.nodejs_version, '4.2.1');
+    assert.equal(config.npm_version, '3.3.9');
     assert.equal(config.nodist_version, '0.6.0');
     assert.equal(config.electron_version, '0.30.8');
   });
@@ -22,7 +22,7 @@ describe('config', function() {
     assert(c.nodist_prefix);
     // 'https://github.com/marcelklehr/nodist/archive/v0.6.0.zip',
     assert(c.nodist_url);
-    // 'iojsv2.3.4',
+    // 'nodev4.2.1',
     assert(c.nodist_use);
     // 'C:/.mj/nodist-0.6.0/bin'
     assert(c.bin_directory);
