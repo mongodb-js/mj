@@ -1,21 +1,35 @@
 var format = require('util').format;
 var Khaos = require('khaos');
-var path = require('path');
+var path = require('path-extra');
 var fs = require('fs');
+var exists = fs.existsSync;
 var _ = require('lodash');
 var shell = require('shelljs');
 var taskmgr = require('../lib/taskmgr');
 var which = require('which');
+var download = require('download-github-repo');
+var changeCase = require('change-case');
 
 // Template dependency tree
 var templateDependencies = {
   empty: null,
-  cli: 'empty',
-  view: 'empty',
-  util: 'empty',
-  doc: 'empty',
-  spa: 'view',
-  full: 'spa'
+  cli: 'empty'
+  // view: 'empty',
+  // util: 'empty',
+  // doc: 'empty',
+  // spa: 'view',
+  // full: 'spa'
+};
+
+var templateNameToRepo = {
+  empty: 'mongodb-js/khaos-node',
+  cli: 'mongodb-js/khaos-cli'
+};
+
+var khaosHelpers = {
+  'moduleName': function(str) {
+    return changeCase.paramCase(str);
+  }
 };
 
 module.exports = function(args, done) {
@@ -86,36 +100,50 @@ module.exports = function(args, done) {
 
   // add khaos tasks for each template in the dependency tree
   var generateTemplate = function(template, parent) {
+    var templateLocation = path.join(path.homedir(), '.mj', 'templates', template);
     return function(callback, results) {
-      var khaos = new Khaos(path.join(__dirname, '../templates/', template));
-      khaos.read(function(err, files) {
-        if (err) return callback(err);
+      var processTemplate = function(location, cb) {
+        var khaos = new Khaos(path.join(templateLocation, 'template'));
+        khaos.helpers(khaosHelpers);
+        khaos.read(function(err, files) {
+          if (err) return cb(err);
+          khaos.parse(files, function(err2, schema) {
+            if (err2) return cb(err2);
 
-        khaos.parse(files, function(err, schema) {
-          if (err) return callback(err);
+            // only prompt for new variables
+            var newVars = _.omit(schema, _.keys(results[parent] || args.answers));
+            khaos.prompt(newVars, function(err3, answers) {
+              if (err3) return cb(err3);
 
-          // only prompt for new variables
-          var newVars = _.omit(schema, _.keys(results[parent] || args.answers));
-          khaos.prompt(newVars, function(err, answers) {
-            if (err) return callback(err);
-
-            // merge new answers with existing ones and pass to next template
-            answers = _.merge(answers, results[parent] || args.answers || {});
-            khaos.write(results.destination, files, answers, function(err) {
-              callback(err, answers);
+              // merge new answers with existing ones and pass to next template
+              answers = _.merge(answers, results[parent] || args.answers || {});
+              khaos.write(results.destination, files, answers, function(err4) {
+                cb(err4, answers);
+              });
             });
           });
         });
-      });
+      };
+
+      // download from github if not yet locally cached
+      if (!exists(templateLocation)) {
+        download(templateNameToRepo[template], templateLocation, function(err) {
+          if (err) return callback(err);
+          processTemplate(templateLocation, callback);
+        });
+      } else {
+        processTemplate(templateLocation, callback);
+      }
     };
   };
+
   var curr = args['<template>'];
   while (curr) {
     var parent = templateDependencies[curr];
     // non-root depends on parent template, root on 'template' and 'destination'
     tasks[curr] = parent ?
       [parent, generateTemplate(curr, parent)] :
-      ['template', 'destination', generateTemplate(curr, parent)];
+      [/* 'template', */ 'destination', generateTemplate(curr, parent)];
     curr = parent;
   }
 
