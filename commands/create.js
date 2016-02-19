@@ -8,28 +8,18 @@ var shell = require('shelljs');
 var taskmgr = require('../lib/taskmgr');
 var which = require('which');
 var download = require('download-github-repo');
-var changeCase = require('change-case');
 
 // Template dependency tree
 var templateDependencies = {
-  empty: null,
-  cli: 'empty'
-  // view: 'empty',
-  // util: 'empty',
-  // doc: 'empty',
-  // spa: 'view',
-  // full: 'spa'
+  base: null,
+  cli: 'base',
+  react: 'base'
 };
 
 var templateNameToRepo = {
-  empty: 'mongodb-js/khaos-node',
-  cli: 'mongodb-js/khaos-cli'
-};
-
-var khaosHelpers = {
-  'moduleName': function(str) {
-    return changeCase.paramCase(str);
-  }
+  base: 'mongodb-js/khaos-node',
+  cli: 'mongodb-js/khaos-cli',
+  react: 'mongodb-js/khaos-react'
 };
 
 module.exports = function(args, done) {
@@ -100,11 +90,15 @@ module.exports = function(args, done) {
 
   // add khaos tasks for each template in the dependency tree
   var generateTemplate = function(template, parent) {
-    var templateLocation = path.join(path.homedir(), '.mj', 'templates', template);
+    var templateLocation;
+    if (templateNameToRepo[template].startsWith('file://')) {
+      templateLocation = templateNameToRepo[template].slice(7);
+    } else {
+      templateLocation = path.join(path.homedir(), '.mj', 'templates', template);
+    }
     return function(callback, results) {
       var processTemplate = function(location, cb) {
         var khaos = new Khaos(path.join(templateLocation, 'template'));
-        khaos.helpers(khaosHelpers);
         khaos.read(function(err, files) {
           if (err) return cb(err);
           khaos.parse(files, function(err2, schema) {
@@ -143,7 +137,7 @@ module.exports = function(args, done) {
     // non-root depends on parent template, root on 'template' and 'destination'
     tasks[curr] = parent ?
       [parent, generateTemplate(curr, parent)] :
-      [/* 'template', */ 'destination', generateTemplate(curr, parent)];
+      ['template', 'destination', generateTemplate(curr, parent)];
     curr = parent;
   }
 
