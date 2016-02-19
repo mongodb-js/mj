@@ -94,7 +94,7 @@ module.exports = function(args, done) {
     if (templateNameToRepo[template].startsWith('file://')) {
       templateLocation = templateNameToRepo[template].slice(7);
     } else {
-      templateLocation = path.join(path.homedir(), '.mj', 'templates', template);
+      templateLocation = path.join(path.homedir(), '.khaos', 'templates', template);
     }
     return function(callback, results) {
       var processTemplate = function(location, cb) {
