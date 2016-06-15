@@ -25,7 +25,7 @@ var sublime_plugins = [
  * @param {Function} fn (error, exists)
  */
 function isModuleInstalledGlobally(name, fn) {
-  var cmd = 'npm ls --global --production --json --depth=0';
+  var cmd = 'npm ls --global --json --depth=0';
   exec(cmd, function(err, stdout) {
     if (err) {
       return fn(err);
