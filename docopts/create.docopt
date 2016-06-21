@@ -18,5 +18,6 @@ used.
 
 Possible choices for <template> are:
 
-  empty    template with bare minimum to qualify as mongodb-js.
-  cli      command-line interface tool, like "mj".
+  base     template with minimum boilerplate to qualify as mongodb-js.
+  cli      command-line interface tool, like "mj" itself (inherits `base`).
+  react    self-contained react UI component (inherits `base`).
